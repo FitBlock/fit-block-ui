@@ -23,5 +23,9 @@
   "bugs": {
     "url": "https://github.com/FitBlock/fit-block-ui/issues"
   },
-  "homepage": "https://github.com/FitBlock/fit-block-ui#readme"
+  "homepage": "https://github.com/FitBlock/fit-block-ui#readme",
+  "devDependencies": {
+    "typescript": "^3.7.4",
+    "@types/node": "^12.12.14"
+  }
 }
