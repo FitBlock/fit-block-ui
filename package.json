@@ -4,7 +4,9 @@
   "description": "FitBlock integration UI component",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\""
+    "test": "echo \"Error: no test specified\"",
+    "prepare": "npx tsc",
+    "build": "npx tsc && npx webpack"
   },
   "repository": {
     "type": "git",
@@ -25,7 +27,10 @@
   },
   "homepage": "https://github.com/FitBlock/fit-block-ui#readme",
   "devDependencies": {
+    "@types/node": "^12.12.14",
+    "html-webpack-plugin": "^3.2.0",
     "typescript": "^3.7.4",
-    "@types/node": "^12.12.14"
+    "webpack": "^4.41.5",
+    "webpack-cli": "^3.3.10"
   }
 }
