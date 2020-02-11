@@ -8,6 +8,7 @@
         "ui/**/*",
         "types/**/*",
         "test/**/*",
+        "start/**/*",
         "uiFactory.ts",
         "index.ts"
     ]
