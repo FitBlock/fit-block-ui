@@ -1,12 +1,17 @@
-import appHtml from './app.html'
-class AppContainer extends HTMLElement {
+import appHtml from '@/app.html'
+import HTMLContent from '@/components/HTMLContent'
+import MyHashRoute from '@/components/MyHashRoute'
+import MyRouter from '@/components/MyRouter'
+import MyHome from '@/pages/MyHome'
+import MyWallet from '@/pages/MyWallet'
+class AppContainer extends HTMLContent {
     constructor() {
         super();
-        const template = document.createElement('template');
-        template.innerHTML = appHtml;
-        const content = template.content.cloneNode(true);
-        const shadow = this.attachShadow( { mode: 'closed' } );
-        shadow.appendChild(content);
+        this.render(appHtml)
     }
   }
 window.customElements.define('app-container', AppContainer);
+window.customElements.define('my-home', MyHome);
+window.customElements.define('my-wallet', MyWallet);
+window.customElements.define('my-router', MyRouter);
+window.customElements.define('my-hash-route', MyHashRoute);
