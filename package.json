@@ -37,7 +37,10 @@
     "webpack-cli": "^3.3.10"
   },
   "dependencies": {
+    "fit-block-core": "^1.1.7",
+    "fit-block-p2p": "^1.0.1",
     "koa": "^2.11.0",
-    "koa-static": "^5.0.0"
+    "koa-static": "^5.0.0",
+    "my-i18n": "^1.0.15"
   }
 }
