@@ -1,6 +1,6 @@
 {
   "name": "fit-block-ui",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "FitBlock integration UI component",
   "main": "index.js",
   "scripts": {
@@ -37,7 +37,7 @@
     "webpack-cli": "^3.3.10"
   },
   "dependencies": {
-    "fit-block-core": "^1.1.7",
+    "fit-block-core": "^1.1.8",
     "fit-block-p2p": "^1.0.1",
     "koa": "^2.11.0",
     "koa-static": "^5.0.0",
