@@ -1,7 +1,9 @@
 export default {
     "home.title.welcome":"Welcome to",
-    "home.form.private_key":"private key",
+    "home.form.privateKey":"private key",
     "home.form.password":"password",
-    "home.button.random_private_key":"random private key",
+    "home.form.inputOrRandomPrivateKey":"input private key or random，please",
+    "home.form.privateKeyFormat":"must be 64 characters‘s hex number (Hash256)",
+    "home.button.randomPrivateKey":"random private key",
     "home.button.into":"into",
 }

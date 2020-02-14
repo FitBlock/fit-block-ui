@@ -1,11 +1,16 @@
 <h1>${welcomeStr} FitBlock!</h1>
-<form>
+<form class="into-form">
     ${privateKeyStr}: 
     <input class="private-key-input"
-     type="text" name="privateKey" />
-    <button class="private-key-rand-btn" type="button">${randomPrivateKeyStr}</button>
+     type="text" name="privateKey" 
+     pattern="[0-9a-f]{64}" 
+     title="${privateKeyFormatStr}"
+     placeholder="${inputOrRandomPrivateKeyStr}"
+     autofocus
+     required />
+    <button class="private-key-rand-btn" type="button" >${randomPrivateKeyStr}</button>
     <br>
-    <button class="into-btn" type="button">${intoStr}</button>
+    <button class="into-btn" type="submit">${intoStr}</button>
 </form>
 <style>
     .private-key-input{
