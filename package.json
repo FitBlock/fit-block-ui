@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\"",
-    "start": "node ./build/start/index",
+    "web": "node ./build/web/index",
     "prepare": "npx tsc",
     "build": "npx tsc && npx webpack"
   },
@@ -29,6 +29,7 @@
   "homepage": "https://github.com/FitBlock/fit-block-ui#readme",
   "devDependencies": {
     "@types/koa": "^2.11.0",
+    "@types/koa-router": "^7.4.0",
     "@types/node": "^12.12.14",
     "html-loader": "^0.5.5",
     "html-webpack-plugin": "^3.2.0",
@@ -40,6 +41,7 @@
     "fit-block-core": "^1.1.8",
     "fit-block-p2p": "^1.0.1",
     "koa": "^2.11.0",
+    "koa-router": "^8.0.8",
     "koa-static": "^5.0.0",
     "my-i18n": "^1.0.15"
   }
