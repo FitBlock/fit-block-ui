@@ -1,0 +1,31 @@
+<form class="gen-private-key-form">
+    <div class="div-center">
+        <textarea 
+        class="gen-private-textarea"
+        rows="10" cols="100" 
+        placeholder="${characterPlaceholderStr}"
+        autofocus required></textarea>
+    </div>
+    <div class="div-center">
+        <button class="gen-private-key-btn" type="submit" >${generatePrivateByTextStr}</button>
+    </div>
+</form>
+<div>
+    <div class="div-center">
+        <input class="private-key-input"
+        placeholder="${privateKeyPlaceholderStr}"
+        type="text" readonly />
+    </div>
+    <div class="div-center">
+        <button class="copy-clip-and-back-btn" type="button" disabled>${copyclipAndBackStr}</button>
+    </div>
+</div>
+<style>
+.div-center {
+    display:flex;
+    justify-content: center;
+}
+.private-key-input{
+    width: 500px;
+}
+</style>

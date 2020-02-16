@@ -19,6 +19,7 @@ export default class MyHome extends HTMLContent {
         const transData = this.getTrans()
         this.render(indexHtml,{...transData})
         this.addRandBtnListen()
+        this.addGenPrivateKeyBtnListen()
         this.addIntoBtnListen()
     }
 
@@ -28,6 +29,13 @@ export default class MyHome extends HTMLContent {
             const privateKeyByRand = blockCore.genPrivateKeyByRand()
             const privateKeyInput = this.shadow.querySelector(".private-key-input")
             privateKeyInput.value = privateKeyByRand
+        })
+    }
+
+    addGenPrivateKeyBtnListen() {
+        const genPrivateKeyBtn = this.shadow.querySelector(".gen-private-key-btn")
+        genPrivateKeyBtn.addEventListener('click',()=>{
+            window.location.hash="#gen-private"
         })
     }
 
@@ -55,6 +63,7 @@ export default class MyHome extends HTMLContent {
             inputOrRandomPrivateKeyStr:myI18nInstance.formatMessage({id:'home.form.inputOrRandomPrivateKey'}),
             privateKeyFormatStr:myI18nInstance.formatMessage({id:'home.form.privateKeyFormat'}),
             randomPrivateKeyStr:myI18nInstance.formatMessage({id:'home.button.randomPrivateKey'}),
+            genPrivateKeyStr:myI18nInstance.formatMessage({id:'home.button.genPrivateKey'}),
             intoStr:myI18nInstance.formatMessage({id:'home.button.into'}),
         }
     }

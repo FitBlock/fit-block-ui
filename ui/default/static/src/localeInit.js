@@ -33,3 +33,5 @@ myI18n.init((myLocale)=>{
     "en-US":enUS,
     "zh-CN":zhCN,
 })
+
+export default myI18n.getInstance()
