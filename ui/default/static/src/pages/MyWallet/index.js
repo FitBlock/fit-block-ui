@@ -30,6 +30,12 @@ export default class MyWallet extends HTMLContent {
     getTrans() {
         return {
             switchPrivateKeyStr:myI18nInstance.formatMessage({id:'wallet.button.switchPrivateKey'}),
+            miningPoolStr:myI18nInstance.formatMessage({id:'wallet.button.miningPool'}),
+            transferStr:myI18nInstance.formatMessage({id:'wallet.button.transfer'}),
+            balanceStr:myI18nInstance.formatMessage({id:'wallet.text.balance'}),
+            loadingStr:myI18nInstance.formatMessage({id:'wallet.text.loading'}),
+            walletAddressStr:myI18nInstance.formatMessage({id:'wallet.title.walletAddress'}),
+            transactionFlowStr:myI18nInstance.formatMessage({id:'wallet.title.transactionFlow'})
         }
     }
 

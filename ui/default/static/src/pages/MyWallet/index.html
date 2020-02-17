@@ -1,13 +1,30 @@
 <div class="wallet-adress-head">
-    <h1>walletAdress:</h1>
-    <p>${walletAdress}
+    <h1>${walletAddressStr}(${transferStr}:F
+        <span class="balance-text">${loadingStr}</span>
+        ):</h1>
+    <div>${walletAdress}
         <button 
         class="switch-private-key-btn" 
         type="button" 
         >${switchPrivateKeyStr}</button>
-    </p>
+        <button 
+        class="mining-coin-btn"
+        type="button" 
+        >${miningPoolStr}</button>
+    </div>
 </div>
-
+<div>
+    <h1>${transactionFlowStr}
+        <button 
+        class="trans-btn" 
+        type="button" 
+        >${transferStr}</button>
+    </h1>
+    <ul>
+        <li>${loadingStr}</li>
+    </ul>
+    
+</div>
 <style>
 .wallet-adress-head {
     border: 3px solid #000;
