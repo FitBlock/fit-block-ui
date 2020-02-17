@@ -1,7 +1,12 @@
 import indexHtml from './index.html'
 import HTMLContent from '@/components/HTMLContent'
-import myI18n from "my-i18n";
-const myI18nInstance = myI18n.getInstance()
+import enUS from './locale/en-US';
+import zhCN from './locale/zh-CN';
+import myI18n from 'my-i18n';
+const myI18nInstance = myI18n.getInstance({
+    'en-US':enUS,
+    'zh-CN':zhCN,
+})
 export default class MyHeader extends HTMLContent {
     constructor() {
         super();
@@ -9,7 +14,8 @@ export default class MyHeader extends HTMLContent {
             {lang:'zh-CN',name:'简体中文'},
             {lang:'en-US',name:'English'}
         ]
-        this.render(indexHtml)
+        const transData = this.getTrans()
+        this.render(indexHtml,{...transData})
         this.addSelectOption(langList)
         this.addSelectListen()
     }
@@ -30,5 +36,10 @@ export default class MyHeader extends HTMLContent {
             selectDom.add(option)
         }
         
+    }
+    getTrans() {
+        return {
+            buildSelfPoolStr:myI18nInstance.formatMessage({id:'header.button.buildSelfPool'}),
+        }
     }
 }
