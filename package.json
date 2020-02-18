@@ -38,8 +38,9 @@
     "webpack-cli": "^3.3.10"
   },
   "dependencies": {
-    "fit-block-core": "^1.1.8",
+    "fit-block-core": "^1.1.10",
     "fit-block-p2p": "^1.0.1",
+    "fit-block-store": "^1.0.1",
     "koa": "^2.11.0",
     "koa-router": "^8.0.8",
     "koa-static": "^5.0.0",

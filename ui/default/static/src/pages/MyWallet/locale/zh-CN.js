@@ -2,6 +2,7 @@ export default {
     "wallet.button.switchPrivateKey":"切换私钥",
     "wallet.button.miningPool":"矿池挖矿",
     "wallet.button.transfer":"转账",
+    "wallet.button.reloadBalance":"重新载入余额",
     "wallet.text.balance":"余额",
     "wallet.text.loading":"载入中...",
     "wallet.title.walletAddress":"钱包地址",

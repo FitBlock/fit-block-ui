@@ -1,3 +1,4 @@
 export default {
-    walletAdressKey:'walletAdress'
+    walletAdressKey:'walletAdress',
+    coinNumberDataKey:'coinNumberDataKey',
 }

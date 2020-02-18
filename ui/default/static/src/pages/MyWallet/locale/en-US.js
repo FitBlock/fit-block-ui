@@ -2,6 +2,7 @@ export default {
     "wallet.button.switchPrivateKey":"switch private key",
     "wallet.button.miningPool":"mining pool",
     "wallet.button.transfer":"transfer",
+    "wallet.button.reloadBalance":"reload balance",
     "wallet.text.balance":"balance",
     "wallet.text.loading":"loading...",
     "wallet.title.walletAddress":"Wallet Address",
