@@ -22,6 +22,7 @@ export default class MyWallet extends HTMLContent {
         this.addSwitchPrivateKeyBtnListen()
         this.addReloadCoinNumberBtnListen()
         this.loadCoinNumber()
+        this.loadTransaction()
     }
 
     addSwitchPrivateKeyBtnListen() {
@@ -64,6 +65,23 @@ export default class MyWallet extends HTMLContent {
             balanceText.innerText = data.coinNumber
             reloadCoinNumberBtn.disabled = false;
         }, 5*1000)
+    }
+    loadTransaction() {
+        // 使用按钮load最新数据
+        let data = JSON.parse(window.localStorage.getItem(config.transactionDataKey))
+        if(!data){
+            const preGodBlock = blockCore.getPreGodBlock()
+            const transactionData = {
+                // 这里设置限制，web只显示末尾10条内容
+                transactionList:[],
+                params:{
+                    timestamp:preGodBlock.timestamp,
+                    nextBlockHash:preGodBlock.nextBlockHash
+                }
+            }
+            // todo
+        }
+        clearInterval(transactionInterval)
     }
     getTrans() {
         return {
