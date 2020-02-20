@@ -6,6 +6,7 @@ import enUS from './locale/en-US';
 import zhCN from './locale/zh-CN';
 import myI18n from 'my-i18n';
 import config from '@/config'
+import walletAddressPermission from '@/permission/walletAddress'
 const myI18nInstance = myI18n.getInstance({
     'en-US':enUS,
     'zh-CN':zhCN,
@@ -13,10 +14,8 @@ const myI18nInstance = myI18n.getInstance({
 export default class MyWallet extends HTMLContent {
     constructor() {
         super();
+        walletAddressPermission.checkWalletAdress()
         this.walletAdress = window.localStorage.getItem(config.walletAdressKey)
-        if(!this.walletAdress) {
-            return this.goHome()
-        }
         const transData = this.getTrans()
         this.render(indexHtml,{walletAdress:this.walletAdress,...transData})
         this.addSwitchPrivateKeyBtnListen()
@@ -142,9 +141,5 @@ export default class MyWallet extends HTMLContent {
             walletAddressStr:myI18nInstance.formatMessage({id:'wallet.title.walletAddress'}),
             transactionFlowStr:myI18nInstance.formatMessage({id:'wallet.title.transactionFlow'})
         }
-    }
-
-    goHome() {
-        window.location.hash=""
     }
 }

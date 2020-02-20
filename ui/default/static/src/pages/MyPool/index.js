@@ -1,17 +1,10 @@
 import indexHtml from './index.html'
 import HTMLContent from '@/components/HTMLContent'
-import config from '@/config'
+import walletAddressPermission from '@/permission/walletAddress'
 export default class MyHome extends HTMLContent {
     constructor() {
         super();
-        this.walletAdress = window.localStorage.getItem(config.walletAdressKey)
-        if(!this.walletAdress) {
-            return this.goHome()
-        }
+        walletAddressPermission.checkWalletAdress()
         this.render(indexHtml)
-    }
-
-    goHome() {
-        window.location.hash=""
     }
 }
