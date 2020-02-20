@@ -18,32 +18,36 @@ export default class MyWallet extends HTMLContent {
         this.walletAdress = window.localStorage.getItem(config.walletAdressKey)
         const transData = this.getTrans()
         this.render(indexHtml,{walletAdress:this.walletAdress,...transData})
-        this.addSwitchPrivateKeyBtnListen()
-        this.addMiningCoinBtnListen()
-        this.addReloadCoinNumberBtnListen()
-        this.addGetLastRecordsBtnListen()
+        this.addListen()
+        this.initTransaction()
         this.loadCoinNumber()
     }
-
-    addSwitchPrivateKeyBtnListen() {
+    addListen() {
         const switchPrivateKeyBtn = this.shadow.querySelector(".switch-private-key-btn")
         switchPrivateKeyBtn.addEventListener('click',()=>{
-            window.localStorage.removeItem(config.walletAdressKey)
-            window.location.hash="";
+            this.switchPrivateKey()
         })
-    }
-    addMiningCoinBtnListen() {
         const miningCoinBtn = this.shadow.querySelector(".mining-coin-btn")
         miningCoinBtn.addEventListener('click',()=>{
-            window.location.hash="#pool";
+            this.toPool()
         })
-    }
-    addReloadCoinNumberBtnListen() {
         const reloadCoinNumberBtn = this.shadow.querySelector(".reload-coin-number-btn")
         reloadCoinNumberBtn.addEventListener('click',()=>{
             this.loadCoinNumber()
         })
+        const getLastRecordsBtn = this.shadow.querySelector(".get-last-records-btn")
+        getLastRecordsBtn.addEventListener('click',async()=>{
+            await this.loadTransaction()
+        })
     }
+    switchPrivateKey() {
+        window.localStorage.removeItem(config.walletAdressKey)
+        window.location.hash="";
+    }
+    toPool() {
+        window.location.hash="#pool";
+    }
+
     loadCoinNumber() {
         const reloadCoinNumberBtn = this.shadow.querySelector(".reload-coin-number-btn")
         const balanceText = this.shadow.querySelector(".balance-text")
@@ -72,14 +76,9 @@ export default class MyWallet extends HTMLContent {
             reloadCoinNumberBtn.disabled = false;
         }, 5*1000)
     }
-    addGetLastRecordsBtnListen() {
+    initTransaction() {
         let data = JSON.parse(window.localStorage.getItem(config.transactionDataKey))
         if(data){this.prependUl(data.transactionList)}
-        const getLastRecordsBtn = this.shadow.querySelector(".get-last-records-btn")
-        getLastRecordsBtn.addEventListener('click',async()=>{
-            await this.loadTransaction()
-        })
-
     }
     async loadTransaction() {
         const getLastRecordsBtn = this.shadow.querySelector(".get-last-records-btn")

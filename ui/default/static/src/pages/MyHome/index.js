@@ -18,38 +18,50 @@ export default class MyHome extends HTMLContent {
         }
         const transData = this.getTrans()
         this.render(indexHtml,{...transData})
-        this.addRandBtnListen()
-        this.addGenPrivateKeyBtnListen()
-        this.addIntoBtnListen()
+        this.addListen()
     }
-
-    addRandBtnListen() {
+    addListen() {
+        const privateKeyInput = this.shadow.querySelector(".private-key-input")
+        privateKeyInput.addEventListener('keyup',(e)=>{
+            this.onPrivateKeyInputEnter(e)
+        })
         const randBtn = this.shadow.querySelector(".private-key-rand-btn")
         randBtn.addEventListener('click',()=>{
-            const privateKeyByRand = blockCore.genPrivateKeyByRand()
-            const privateKeyInput = this.shadow.querySelector(".private-key-input")
-            privateKeyInput.value = privateKeyByRand
+            this.randPrivateKey()
         })
-    }
-
-    addGenPrivateKeyBtnListen() {
         const genPrivateKeyBtn = this.shadow.querySelector(".gen-private-key-btn")
         genPrivateKeyBtn.addEventListener('click',()=>{
-            window.location.hash="#gen-private"
+            this.toGenPrivateKey()
         })
-    }
-
-    addIntoBtnListen() {
         const intoForm = this.shadow.querySelector(".into-form")
         intoForm.onsubmit = () =>{
-            const privateKeyInput = this.shadow.querySelector(".private-key-input")
-            const walletAdress = blockCore.getWalletAdressByPublicKey(
-                blockCore.getPublicKeyByPrivateKey(privateKeyInput.value)
-            )
-            window.localStorage.setItem(config.walletAdressKey,walletAdress)
-            this.toWallet()
+            this.intoWallet()
             return false;
         }
+    }
+    onPrivateKeyInputEnter(event) {
+        if(event.keyCode===13) {
+            const intoForm = this.shadow.querySelector(".into-form")
+            intoForm.submit()
+        }
+    }
+    randPrivateKey() {
+        const privateKeyByRand = blockCore.genPrivateKeyByRand()
+        const privateKeyInput = this.shadow.querySelector(".private-key-input")
+        privateKeyInput.value = privateKeyByRand
+    }
+
+    toGenPrivateKey() {
+        window.location.hash="#gen-private"
+    }
+
+    intoWallet() {
+        const privateKeyInput = this.shadow.querySelector(".private-key-input")
+        const walletAdress = blockCore.getWalletAdressByPublicKey(
+            blockCore.getPublicKeyByPrivateKey(privateKeyInput.value)
+        )
+        window.localStorage.setItem(config.walletAdressKey,walletAdress)
+        this.toWallet()
     }
 
     toWallet() {

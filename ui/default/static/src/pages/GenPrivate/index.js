@@ -13,30 +13,32 @@ export default class GenPrivate extends HTMLContent {
         super();
         const transData = this.getTrans()
         this.render(indexHtml,{...transData})
-        this.addGenPrivateKeyBtnListen()
-        this.addCopyClipAndBackBtnListen()
+        this.addListen()
     }
-
-    addGenPrivateKeyBtnListen() {
+    addListen() {
         const intoForm = this.shadow.querySelector(".gen-private-key-form")
         intoForm.onsubmit = () =>{
-            const genPrivateTextarea = this.shadow.querySelector(".gen-private-textarea")
-            const privateKey = blockCore.genPrivateKeyByString(genPrivateTextarea.value)
-            const privateKeyInput = this.shadow.querySelector(".private-key-input")
-            privateKeyInput.value = privateKey;
-            const copyClipAndBackBtn = this.shadow.querySelector(".copy-clip-and-back-btn")
-            copyClipAndBackBtn.disabled = false
+            this.genPrivateKey()
             return false;
         }
-    }
-    addCopyClipAndBackBtnListen() {
         const copyClipAndBackBtn = this.shadow.querySelector(".copy-clip-and-back-btn")
         copyClipAndBackBtn.addEventListener('click',()=>{
-            const privateKeyInput = this.shadow.querySelector(".private-key-input")
-            privateKeyInput.select()
-            document.execCommand("Copy");
-            this.goBack()
+            this.copyClipAndBack()
         })
+    }
+    genPrivateKey() {
+        const genPrivateTextarea = this.shadow.querySelector(".gen-private-textarea")
+        const privateKey = blockCore.genPrivateKeyByString(genPrivateTextarea.value)
+        const privateKeyInput = this.shadow.querySelector(".private-key-input")
+        privateKeyInput.value = privateKey;
+        const copyClipAndBackBtn = this.shadow.querySelector(".copy-clip-and-back-btn")
+        copyClipAndBackBtn.disabled = false
+    }
+    copyClipAndBack() {
+        const privateKeyInput = this.shadow.querySelector(".private-key-input")
+        privateKeyInput.select()
+        document.execCommand("Copy");
+        this.goBack()
     }
 
     goBack() {
