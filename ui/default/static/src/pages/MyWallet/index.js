@@ -20,6 +20,7 @@ export default class MyWallet extends HTMLContent {
         const transData = this.getTrans()
         this.render(indexHtml,{walletAdress:this.walletAdress,...transData})
         this.addSwitchPrivateKeyBtnListen()
+        this.addMiningCoinBtnListen()
         this.addReloadCoinNumberBtnListen()
         this.addGetLastRecordsBtnListen()
         this.loadCoinNumber()
@@ -30,6 +31,12 @@ export default class MyWallet extends HTMLContent {
         switchPrivateKeyBtn.addEventListener('click',()=>{
             window.localStorage.removeItem(config.walletAdressKey)
             window.location.hash="";
+        })
+    }
+    addMiningCoinBtnListen() {
+        const miningCoinBtn = this.shadow.querySelector(".mining-coin-btn")
+        miningCoinBtn.addEventListener('click',()=>{
+            window.location.hash="#pool";
         })
     }
     addReloadCoinNumberBtnListen() {
