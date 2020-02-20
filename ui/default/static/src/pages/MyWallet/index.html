@@ -1,35 +1,36 @@
 <div class="wallet-adress-head">
-    <h1>${walletAddressStr}(${transferStr}:F
-        <span class="balance-text">${loadingStr}</span>
+    <h1>${myI18n('wallet.title.walletAddress')}(${myI18n('wallet.text.balance')}:F
+        <span class="balance-text">${myI18n('wallet.text.loading')}</span>
         <button 
         class="reload-coin-number-btn" 
         type="button" 
-        >${reloadBalanceStr}</button>
+        >${myI18n('wallet.button.reloadBalance')}</button>
         ):</h1>
     <div>${walletAdress}
         <button 
         class="switch-private-key-btn" 
         type="button" 
-        >${switchPrivateKeyStr}</button>
+        >${myI18n('wallet.button.switchPrivateKey')}</button>
         <button 
         class="mining-coin-btn"
         type="button" 
-        >${miningPoolStr}</button>
+        >${myI18n('wallet.button.miningPool')}</button>
     </div>
 </div>
 <div>
-    <h1>${transactionFlowStr}</h1>
+    <h1>${myI18n('wallet.title.transactionFlow')}</h1>
     <p> 
-        ${onlyShowLastRecordsStr}
+        ${myI18n('wallet.title.onlyShowLastRecords')}
         <button 
         class="get-last-records-btn" 
         type="button" 
-        >${getLastTransactionRecordsStr}</button>
+        >${myI18n('wallet.button.getLastTransactionRecords')}</button>
         <button 
         class="trans-btn" 
         type="button" 
-        >${transferStr}</button>
+        >${myI18n('wallet.button.transfer')}</button>
     </p>
+    <p class="transaction-loding"></p>
     <ul class="transaction-ul">
     </ul>
     

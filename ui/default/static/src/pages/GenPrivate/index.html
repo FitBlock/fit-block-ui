@@ -3,21 +3,21 @@
         <textarea 
         class="gen-private-textarea"
         rows="10" cols="100" 
-        placeholder="${characterPlaceholderStr}"
+        placeholder="${myI18n('genPrivate.form.characterPlaceholder')}"
         autofocus required></textarea>
     </div>
     <div class="div-center">
-        <button class="gen-private-key-btn" type="submit" >${generatePrivateByTextStr}</button>
+        <button class="gen-private-key-btn" type="submit" >${myI18n('genPrivate.button.generatePrivateByText')}</button>
     </div>
 </form>
 <div>
     <div class="div-center">
         <input class="private-key-input"
-        placeholder="${privateKeyPlaceholderStr}"
+        placeholder="${myI18n('genPrivate.form.privateKeyPlaceholder')}"
         type="text" readonly />
     </div>
     <div class="div-center">
-        <button class="copy-clip-and-back-btn" type="button" disabled>${copyclipAndBackStr}</button>
+        <button class="copy-clip-and-back-btn" type="button" disabled>${myI18n('genPrivate.button.copyclipAndBack')}</button>
     </div>
 </div>
 <style>

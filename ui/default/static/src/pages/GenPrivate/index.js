@@ -47,10 +47,7 @@ export default class GenPrivate extends HTMLContent {
 
     getTrans() {
         return {
-            characterPlaceholderStr:myI18nInstance.formatMessage({id:'genPrivate.form.characterPlaceholder'}),
-            generatePrivateByTextStr:myI18nInstance.formatMessage({id:'genPrivate.button.generatePrivateByText'}),
-            privateKeyPlaceholderStr:myI18nInstance.formatMessage({id:'genPrivate.form.privateKeyPlaceholder'}),
-            copyclipAndBackStr:myI18nInstance.formatMessage({id:'genPrivate.button.copyclipAndBack'}),
+            myI18n:(id,params={})=>myI18nInstance.formatMessage({id},params),
         }
     }
 }

@@ -1,17 +1,17 @@
-<h1>${welcomeStr} FitBlock!</h1>
+<h1>${'home.title.welcome'} FitBlock!</h1>
 <form class="into-form">
-    ${privateKeyStr}: 
+    ${myI18n('home.form.privateKey')}: 
     <input class="private-key-input"
      type="text" name="privateKey" 
      pattern="[0-9a-f]{64}" 
-     title="${privateKeyFormatStr}"
-     placeholder="${inputOrRandomPrivateKeyStr}"
+     title="${myI18n('home.form.privateKeyFormat')}"
+     placeholder="${myI18n('home.form.inputOrRandomPrivateKey')}"
      autofocus
      required />
-    <button class="private-key-rand-btn" type="button" >${randomPrivateKeyStr}</button>
-    <button class="gen-private-key-btn" type="button" >${genPrivateKeyStr}</button>
+    <button class="private-key-rand-btn" type="button" >${myI18n('home.button.randomPrivateKey')}</button>
+    <button class="gen-private-key-btn" type="button" >${myI18n('home.button.genPrivateKey')}</button>
     <br>
-    <button class="into-btn" type="submit">${intoStr}</button>
+    <button class="into-btn" type="submit">${myI18n('home.button.into')}</button>
 </form>
 <style>
     .private-key-input{

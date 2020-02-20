@@ -82,7 +82,9 @@ export default class MyWallet extends HTMLContent {
     }
     async loadTransaction() {
         const getLastRecordsBtn = this.shadow.querySelector(".get-last-records-btn")
+        const transactionLodingP = this.shadow.querySelector(".transaction-loding")
         getLastRecordsBtn.disabled = true;
+        transactionLodingP.innerText = myI18nInstance.formatMessage({id:'wallet.text.loading'})
         // 使用按钮load最新数据
         let data = JSON.parse(window.localStorage.getItem(config.transactionDataKey))
         if(!data){
@@ -100,6 +102,7 @@ export default class MyWallet extends HTMLContent {
             walletAdress:this.walletAdress, limit:15, ...data.params
         })
         getLastRecordsBtn.disabled = false;
+        transactionLodingP.innerText = ''
         if(resp.data.transactionList.length<=0){return;}
         data.transactionList = resp.data.transactionList
         data.params = resp.data.params
@@ -129,16 +132,7 @@ export default class MyWallet extends HTMLContent {
     }
     getTrans() {
         return {
-            switchPrivateKeyStr:myI18nInstance.formatMessage({id:'wallet.button.switchPrivateKey'}),
-            miningPoolStr:myI18nInstance.formatMessage({id:'wallet.button.miningPool'}),
-            transferStr:myI18nInstance.formatMessage({id:'wallet.button.transfer'}),
-            reloadBalanceStr:myI18nInstance.formatMessage({id:'wallet.button.reloadBalance'}),
-            getLastTransactionRecordsStr:myI18nInstance.formatMessage({id:'wallet.button.getLastTransactionRecords'}),
-            balanceStr:myI18nInstance.formatMessage({id:'wallet.text.balance'}),
-            loadingStr:myI18nInstance.formatMessage({id:'wallet.text.loading'}),
-            onlyShowLastRecordsStr:myI18nInstance.formatMessage({id:'wallet.text.onlyShowLastRecords'}),
-            walletAddressStr:myI18nInstance.formatMessage({id:'wallet.title.walletAddress'}),
-            transactionFlowStr:myI18nInstance.formatMessage({id:'wallet.title.transactionFlow'})
+            myI18n:(id,params={})=>myI18nInstance.formatMessage({id},params)
         }
     }
 }

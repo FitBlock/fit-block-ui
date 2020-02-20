@@ -39,7 +39,7 @@ export default class MyHeader extends HTMLContent {
     }
     getTrans() {
         return {
-            buildSelfPoolStr:myI18nInstance.formatMessage({id:'header.button.buildSelfPool'}),
+            myI18n:(id,params={})=>myI18nInstance.formatMessage({id},params),
         }
     }
 }

@@ -70,13 +70,7 @@ export default class MyHome extends HTMLContent {
 
     getTrans() {
         return {
-            welcomeStr:myI18nInstance.formatMessage({id:'home.title.welcome'}),
-            privateKeyStr:myI18nInstance.formatMessage({id:'home.form.privateKey'}),
-            inputOrRandomPrivateKeyStr:myI18nInstance.formatMessage({id:'home.form.inputOrRandomPrivateKey'}),
-            privateKeyFormatStr:myI18nInstance.formatMessage({id:'home.form.privateKeyFormat'}),
-            randomPrivateKeyStr:myI18nInstance.formatMessage({id:'home.button.randomPrivateKey'}),
-            genPrivateKeyStr:myI18nInstance.formatMessage({id:'home.button.genPrivateKey'}),
-            intoStr:myI18nInstance.formatMessage({id:'home.button.into'}),
+            myI18n:(id,params={})=>myI18nInstance.formatMessage({id},params)
         }
     }
 }
