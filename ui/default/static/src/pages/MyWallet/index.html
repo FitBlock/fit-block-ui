@@ -20,18 +20,17 @@
 <div>
     <h1>${transactionFlowStr}</h1>
     <p> 
-        only show last ten records(if you leave now tab)
+        ${onlyShowLastRecordsStr}
         <button 
-        class="trans-btn" 
+        class="get-last-records-btn" 
         type="button" 
-        >get last ten</button>
+        >${getLastTransactionRecordsStr}</button>
         <button 
         class="trans-btn" 
         type="button" 
         >${transferStr}</button>
     </p>
-    <ul>
-        <li>${loadingStr}</li>
+    <ul class="transaction-ul">
     </ul>
     
 </div>

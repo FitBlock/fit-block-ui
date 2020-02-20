@@ -69,6 +69,23 @@ class WalletContoller extends baseContoller {
             }
         },1000)
     }
+    getTransactions() {
+        return async (ctx:Koa.ParameterizedContext<Koa.DefaultState, Koa.DefaultContext>)=>{
+            const walletAdress = ctx.query.walletAdress
+            const limit = ctx.query.limit
+            const preGodBlock =  fitBlockCore.getPreGodBlock();
+                preGodBlock.timestamp = ctx.query.timestamp
+                preGodBlock.nextBlockHash = ctx.query.nextBlockHash
+            const data = await fitBlockCore.getTransactionsByWalletAdress(walletAdress, preGodBlock, limit)
+            return this.sucess(ctx,{
+                transactionList:data.transactions,
+                params:{
+                    timestamp:data.lastBlock.timestamp,
+                    nextBlockHash:data.lastBlock.nextBlockHash,
+                }
+               })
+        }
+    }
 }
 const walletContoller = new WalletContoller()
 walletContoller.runCoinNumberMap();

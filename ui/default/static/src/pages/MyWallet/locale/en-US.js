@@ -7,8 +7,10 @@ export default {
     "wallet.text.loading":"loading...",
     "wallet.title.walletAddress":"Wallet Address",
     "wallet.title.transactionFlow":"Transaction Flow",
+    "wallet.button.getLastTransactionRecords":"get last transaction records",
+    "wallet.text.onlyShowLastRecords":"only show last records(if you leave now tab)",
     "wallet.text.transactionRecord":params=>{
-        return `${params.sendAddress}于${params.datetime}转账给${params.acceptAddress},
-        交易量:F${params.coinNumber},手续费:F${params.tradingNumber}，实际到账:F${params.arriveNumber}`;
+        return `${params.sendAddress} at ${params.datetime} send to ${params.acceptAddress},
+        volume:F${params.coinNumber},fee:F${params.tradingNumber}，to account:F${params.arriveNumber}`;
     },
 }

@@ -21,8 +21,8 @@ export default class MyWallet extends HTMLContent {
         this.render(indexHtml,{walletAdress:this.walletAdress,...transData})
         this.addSwitchPrivateKeyBtnListen()
         this.addReloadCoinNumberBtnListen()
+        this.addGetLastRecordsBtnListen()
         this.loadCoinNumber()
-        this.loadTransaction()
     }
 
     addSwitchPrivateKeyBtnListen() {
@@ -66,12 +66,23 @@ export default class MyWallet extends HTMLContent {
             reloadCoinNumberBtn.disabled = false;
         }, 5*1000)
     }
-    loadTransaction() {
+    addGetLastRecordsBtnListen() {
+        let data = JSON.parse(window.localStorage.getItem(config.transactionDataKey))
+        if(data){this.prependUl(data.transactionList)}
+        const getLastRecordsBtn = this.shadow.querySelector(".get-last-records-btn")
+        getLastRecordsBtn.addEventListener('click',async()=>{
+            await this.loadTransaction()
+        })
+
+    }
+    async loadTransaction() {
+        const getLastRecordsBtn = this.shadow.querySelector(".get-last-records-btn")
+        getLastRecordsBtn.disabled = true;
         // 使用按钮load最新数据
         let data = JSON.parse(window.localStorage.getItem(config.transactionDataKey))
         if(!data){
             const preGodBlock = blockCore.getPreGodBlock()
-            const transactionData = {
+            data = {
                 // 这里设置限制，web只显示末尾10条内容
                 transactionList:[],
                 params:{
@@ -79,9 +90,37 @@ export default class MyWallet extends HTMLContent {
                     nextBlockHash:preGodBlock.nextBlockHash
                 }
             }
-            // todo
         }
-        clearInterval(transactionInterval)
+        const resp = await myRequest.get('/wallet/getTransactions',{
+            walletAdress:this.walletAdress, limit:15, ...data.params
+        })
+        getLastRecordsBtn.disabled = false;
+        if(resp.data.transactionList.length<=0){return;}
+        data.transactionList = resp.data.transactionList
+        data.params = resp.data.params
+        window.localStorage.setItem(config.transactionDataKey,JSON.stringify(data))
+        this.prependUl(data.transactionList)
+    }
+
+    prependUl(transactionList) {
+        const transactionUl = this.shadow.querySelector(".transaction-ul")
+        let liStr = ''
+        for(const transactionObj of transactionList) {
+            const transaction = blockCore.getStore().getTransactionSignByStr(
+                JSON.stringify(transactionObj)
+            ) 
+            liStr+=`<li>${
+                myI18nInstance.formatMessage({id:'wallet.title.transactionRecord'},{
+                    sendAddress:transaction.transaction.senderAdress,
+                    datetime:new Date(transaction.transaction.timestamp).toString(),
+                    acceptAddress:transaction.transaction.accepterAdress,
+                    coinNumber:transaction.transaction.transCoinNumber,
+                    tradingNumber:transaction.transaction.getTradingFees(),
+                    arriveNumber:transaction.transaction.getArriveFees(),
+                })
+            }</li>`
+        }
+        transactionUl.prepend(liStr)
     }
     getTrans() {
         return {
@@ -89,8 +128,10 @@ export default class MyWallet extends HTMLContent {
             miningPoolStr:myI18nInstance.formatMessage({id:'wallet.button.miningPool'}),
             transferStr:myI18nInstance.formatMessage({id:'wallet.button.transfer'}),
             reloadBalanceStr:myI18nInstance.formatMessage({id:'wallet.button.reloadBalance'}),
+            getLastTransactionRecordsStr:myI18nInstance.formatMessage({id:'wallet.button.getLastTransactionRecords'}),
             balanceStr:myI18nInstance.formatMessage({id:'wallet.text.balance'}),
             loadingStr:myI18nInstance.formatMessage({id:'wallet.text.loading'}),
+            onlyShowLastRecordsStr:myI18nInstance.formatMessage({id:'wallet.text.onlyShowLastRecords'}),
             walletAddressStr:myI18nInstance.formatMessage({id:'wallet.title.walletAddress'}),
             transactionFlowStr:myI18nInstance.formatMessage({id:'wallet.title.transactionFlow'})
         }
