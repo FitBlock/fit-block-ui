@@ -1,6 +1,8 @@
 import indexHtml from './index.html'
 import HTMLContent from '@/components/HTMLContent'
 import walletAddressPermission from '@/permission/walletAddress'
+import blockCore from 'fit-block-core/build/indexWeb';
+import myRequest from '@/components/MyRequest'
 import enUS from './locale/en-US';
 import zhCN from './locale/zh-CN';
 import myI18n from 'my-i18n';
@@ -13,14 +15,25 @@ export default class MyHome extends HTMLContent {
         super();
         walletAddressPermission.checkWalletAdress()
         const transData = this.getTrans()
-        this.render(indexHtml,{walletAdress:this.walletAdress,...transData})
+        this.render(indexHtml,{
+            poolAdress:myI18nInstance.formatMessage({id:'pool.text.loading'}),
+            ...transData
+        })
+        this.getPoolAddressInfo()
     }
     getTrans() {
         return {
             myI18n:(id,params={})=>myI18nInstance.formatMessage({id},params)
         }
     }
-
+    
+    async getPoolAddressInfo() {
+        const resp = await myRequest.get('/pool/getPoolAddressInfo')
+        const myStore = blockCore.getStore()
+        const coreConfig = blockCore.getConfig()
+        const nowBlock = myStore.getBlockByStr(JSON.stringify(resp.data.nowBlock))
+        if(nowBlock.height<coreConfig.godBlockHeight) {return}
+    }
     startMining() {
         // to do 
         /**
