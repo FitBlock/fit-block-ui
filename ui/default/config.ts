@@ -1,5 +1,4 @@
-import {sep as pathSep} from 'path';
 export default {
-    appSrcPath:__dirname.replace(`fit-block-ui${pathSep}build`,`fit-block-ui`),
+    selfWalletAddress:'SH8ZKQQ8NMwNt2i2GKdPRGjnpZdDXEfFf5foCJmfwtcp7jeMYSMw3eM4mueZdYjKgPyVu8S9tVL76UPLSNgdEbgc',
     port:5050
 }
