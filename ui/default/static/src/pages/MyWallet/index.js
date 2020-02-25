@@ -39,6 +39,10 @@ export default class MyWallet extends HTMLContent {
         getLastRecordsBtn.addEventListener('click',async()=>{
             await this.loadTransaction()
         })
+        const showTextDialog = this.shadow.querySelector(".show-text-dialog")
+        showTextDialog.addEventListener('click',()=>{
+            showTextDialog.close()
+        })
     }
     switchPrivateKey() {
         window.localStorage.removeItem(config.walletAdressKey)
@@ -103,7 +107,12 @@ export default class MyWallet extends HTMLContent {
         })
         getLastRecordsBtn.disabled = false;
         transactionLodingP.innerText = ''
-        if(resp.data.transactionList.length<=0){return;}
+        const showTextDialog = this.shadow.querySelector(".show-text-dialog")
+        if(resp.data.transactionList.length<=0){
+            showTextDialog.innerText = myI18nInstance.formatMessage({id:'wallet.text.transactionsIsEmpty'})
+            showTextDialog.showModal()
+            return;
+        }
         data.transactionList = resp.data.transactionList
         data.params = resp.data.params
         window.localStorage.setItem(config.transactionDataKey,JSON.stringify(data))

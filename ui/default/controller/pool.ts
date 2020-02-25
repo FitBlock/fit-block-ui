@@ -3,12 +3,18 @@ import fitBlockCore from 'fit-block-core'
 import baseContoller from './base';
 import config from '../config'
 class PoolContoller extends baseContoller { 
-    poolAddressInfo:{poolAddress:string,nowBlock:any,miningCoin:number};
+    poolAddressInfo:{
+        poolAddress:string,
+        nowBlock:any,
+        nowTransactionList:Array<any>,
+        miningCoin:number,
+    };
     constructor() {
         super()
         this.poolAddressInfo = {
             poolAddress: config.selfWalletAddress,
             nowBlock:fitBlockCore.getPreGodBlock(),
+            nowTransactionList:[],
             miningCoin:0
         }
     }
@@ -25,6 +31,12 @@ class PoolContoller extends baseContoller {
         )
         this.poolAddressInfo.miningCoin+=miningData.coinNumber;
         this.poolAddressInfo.nowBlock = miningData.lastBlock
+        const transactionSignList = []
+        const myStore = fitBlockCore.getStore()
+        for await(const transactionSign of await myStore.transactionSignIterator()) {
+            transactionSignList.push(transactionSign)
+        }
+        this.poolAddressInfo.nowTransactionList = transactionSignList;
     }
 
     async runPoolAddressInfo() {

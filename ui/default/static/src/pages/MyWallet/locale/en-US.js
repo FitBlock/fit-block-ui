@@ -5,6 +5,7 @@ export default {
     "wallet.button.reloadBalance":"reload balance",
     "wallet.text.balance":"balance",
     "wallet.text.loading":"loading...",
+    "wallet.text.transactionsIsEmpty":"transactions is empty.May be need wait data sync.",
     "wallet.title.walletAddress":"Wallet Address",
     "wallet.title.transactionFlow":"Transaction Flow",
     "wallet.button.getLastTransactionRecords":"get last transaction records",

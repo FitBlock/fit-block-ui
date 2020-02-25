@@ -5,6 +5,7 @@ export default {
     "wallet.button.reloadBalance":"重新载入余额",
     "wallet.text.balance":"余额",
     "wallet.text.loading":"载入中...",
+    "wallet.text.transactionsIsEmpty":"交易是空的.可能需要等待数据同步.",
     "wallet.title.walletAddress":"钱包地址",
     "wallet.title.transactionFlow":"交易流水",
     "wallet.button.getLastTransactionRecords":"获取最新交易记录",
