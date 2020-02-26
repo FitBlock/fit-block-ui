@@ -1,11 +1,13 @@
-<h1 title="become mining pool‘s miner">
-    Mining Pool Total Earned: F 
+<h1>
+    ${myI18n('pool.title.miningPoolTotalEarned')}: F 
     <span class="pool-earned">${myI18n('pool.text.loading')}</span>
 </h1>
-<p>Mining Pool Address: <span class="pool-address">${myI18n('pool.text.loading')}</span></p>
+<p>${myI18n('pool.text.miningPoolAddress')}: <span class="pool-address">${myI18n('pool.text.loading')}</span></p>
 <button 
     class="start-mining-btn" 
     type="button" 
-    >coin-mining</button>
+    >${myI18n('pool.button.coinMining')}</button>
 <dialog class="show-text-dialog"></dialog>
-<h1>Next Block Hash:<span>Not Start Mining</span></h1>
+<h1>${myI18n('pool.title.miningBlockHash')}:
+    <span class="mining-next-block-hash">${myI18n('pool.title.notStartMining')}</span>
+</h1>

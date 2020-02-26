@@ -1,7 +1,7 @@
 import indexHtml from './index.html'
 import HTMLContent from '@/components/HTMLContent'
 import walletAddressPermission from '@/permission/walletAddress'
-import blockCore from 'fit-block-core/indexWeb.js';
+import blockCore from 'fit-block-core/build/indexWeb.js';
 import myRequest from '@/components/MyRequest'
 import enUS from './locale/en-US';
 import zhCN from './locale/zh-CN';
@@ -19,7 +19,8 @@ export default class MyHome extends HTMLContent {
         this.getPoolAddressInfo()
         this.poolAddressInfo = {
             poolAddress:'',
-            nowBlock:blockCore.getPreGodBlock()
+            nowBlock:blockCore.getPreGodBlock(),
+            nowTransactionList:[]
         }
         this.addListen()
     }
@@ -56,34 +57,56 @@ export default class MyHome extends HTMLContent {
         poolEarnedSpan.innerText = resp.data.miningCoin;
         
     }
+    showMiningNextBlockHash(refreshTime) {
+        let miningNextBlockHash = undefined;
+        const miningNextBlockHashInterval = setInterval(()=>{
+            if(!miningNextBlockHash) {
+                clearInterval(miningNextBlockHashInterval)
+                return;
+            }
+            const miningNextBlockHashSpan = this.shadow.querySelector(".mining-next-block-hash")
+            miningNextBlockHashSpan.innerText = miningNextBlockHash
+            miningNextBlockHash = undefined;
+        },refreshTime)
+        return (nextBlockHash)=>{
+            miningNextBlockHash = nextBlockHash
+        }
+    }
     async preMining() {
         const preMiningTime = 10 * 1000;// 10s
         const expectedTime = 120 * 1000; //2min
         const startTime = new Date().getTime()
-        const miningBlock = blockCore.getPreGodBlock()
+        let miningBlock = blockCore.getPreGodBlock()
+        const showHashFunc = this.showMiningNextBlockHash(300);
         await blockCore.mining(
             this.poolAddressInfo.nowBlock,
             this.poolAddressInfo.poolAddress,
+            this.poolAddressInfo.nowTransactionList,
             async (nextBlock)=>{
                 const nowTime = new Date().getTime()
                 if(nowTime-preMiningTime>=startTime) {
                     miningBlock = nextBlock;
                     return false;
                 }
+                showHashFunc(nextBlock.genBlockHash())
                 return true
             }
         )
         return  BigInt(`0x${miningBlock.blockVal}`)*BigInt(expectedTime/preMiningTime)
     }
     async startMining() {
+        const startMiningBtn = this.shadow.querySelector(".start-mining-btn")
+        startMiningBtn.disabled = true
         const coreConfig = blockCore.getConfig()
         const showTextDialog = this.shadow.querySelector(".show-text-dialog")
-        if(this.nowBlock.height<coreConfig.godBlockHeight) {
-            showTextDialog.innerText = 'please wait node sync'
+        if(this.poolAddressInfo.height<coreConfig.godBlockHeight) {
+            showTextDialog.innerText = myI18nInstance.formatMessage({id:"pool.dialog.pleaseWaitNodeSync"})
             showTextDialog.showModal()
             return 
         }
         const rangeNum = await this.preMining();
+        console.log(rangeNum)
+        startMiningBtn.disabled = false
         // to do 
         /**
          * 首先先预挖10S判断机器性能

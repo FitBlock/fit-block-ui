@@ -3,6 +3,8 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const webpack = require('webpack');
 
 module.exports = {
+  // devtool: 'source-map',
+  mode: 'development',
   entry: './ui/default/static/src/app.js',
   output: {
     path: path.join(__dirname, 'build/ui/default/static/'),
