@@ -72,27 +72,8 @@ export default class MyHome extends HTMLContent {
             miningNextBlockHash = nextBlockHash
         }
     }
-    async preMining() {
-        const preMiningTime = 10 * 1000;// 10s
-        const expectedTime = 120 * 1000; //2min
-        const startTime = new Date().getTime()
-        let miningBlock = blockCore.getPreGodBlock()
-        const showHashFunc = this.showMiningNextBlockHash(300);
-        await blockCore.mining(
-            this.poolAddressInfo.nowBlock,
-            this.poolAddressInfo.poolAddress,
-            this.poolAddressInfo.nowTransactionList,
-            async (nextBlock)=>{
-                const nowTime = new Date().getTime()
-                if(nowTime-preMiningTime>=startTime) {
-                    miningBlock = nextBlock;
-                    return false;
-                }
-                showHashFunc(nextBlock.genBlockHash())
-                return true
-            }
-        )
-        return  BigInt(`0x${miningBlock.blockVal}`)*BigInt(expectedTime/preMiningTime)
+    async applyQuota() {
+        
     }
     async startMining() {
         const startMiningBtn = this.shadow.querySelector(".start-mining-btn")
@@ -104,8 +85,17 @@ export default class MyHome extends HTMLContent {
             showTextDialog.showModal()
             return 
         }
-        const rangeNum = await this.preMining();
-        console.log(rangeNum)
+        await this.getPoolAddressInfo()
+        const showHashFunc = this.showMiningNextBlockHash(300);
+        await blockCore.mining(
+            this.poolAddressInfo.nowBlock,
+            this.poolAddressInfo.poolAddress,
+            this.poolAddressInfo.nowTransactionList,
+            async (nextBlock, isComplete)=>{
+                showHashFunc(nextBlock.genBlockHash())
+                return true
+            }
+        )
         startMiningBtn.disabled = false
         // to do 
         /**

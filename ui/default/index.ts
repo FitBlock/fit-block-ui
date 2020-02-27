@@ -15,5 +15,6 @@ export default class UIDefault extends UIBase {
         app.use(koaStatic(pathJoin(__dirname, 'static'),{index:'index.html'}));
         app.use(router.routes())
         app.listen(config.port)
+        console.log(`listening: http://127.0.0.1:${config.port}/`)
     }
 }

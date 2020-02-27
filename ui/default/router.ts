@@ -10,4 +10,8 @@ router.get('/wallet/getCoinNumber',walletContoller.getCoinNumber())
 router.get('/wallet/getTransactions',walletContoller.getTransactions())
 // 获取矿池数据
 router.get('/pool/getPoolAddressInfo',poolContoller.getPoolAddressInfo())
+// 获取在线人数并刷在线时间
+router.get('/pool/getOnlinePeople',poolContoller.getOnlinePeople())
+// 申请挖矿数据段
+router.get('/pool/applyMiningQuota',poolContoller.applyMiningQuota())
 export default router
