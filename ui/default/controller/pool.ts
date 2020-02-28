@@ -2,11 +2,10 @@ import * as Koa from 'koa';
 import fitBlockCore from 'fit-block-core'
 import baseContoller from './base';
 import config from '../config'
-import Block from 'fit-block-core/app/fitblock/Block';
 class PoolContoller extends baseContoller { 
     poolAddressInfo:{
         poolAddress:string,
-        nowBlock:Block,
+        nowBlock:any,
         nowTransactionList:Array<any>,
         miningCoin:number,
     };
