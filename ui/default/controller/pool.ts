@@ -27,15 +27,31 @@ class PoolContoller extends baseContoller {
             nowTransactionList:[],
             miningCoin:0
         }
+        this.miningInfo = {
+            nextBlockHash:'',
+            processValue:0n,
+            workerPool:new Map()
+        }
     }
     getPoolAddressInfo() {
         return async (ctx:Koa.ParameterizedContext<Koa.DefaultState, Koa.DefaultContext>)=>{
             return this.sucess(ctx,this.poolAddressInfo)
         }
     }
+    acceptMiningBlock() {
+        return async (ctx:Koa.ParameterizedContext<Koa.DefaultState, Koa.DefaultContext>)=>{
+            console.log(ctx.post)
+            return this.sucess(ctx,{ok:true})
+        }
+    }
 
     getOnlinePeople() {
         return async (ctx:Koa.ParameterizedContext<Koa.DefaultState, Koa.DefaultContext>)=>{
+            if(!ctx.query.walletAdress) {
+                return this.error(ctx,{
+                    walletAdress:ctx.query.walletAdress
+                },'NEED_PARAMS')
+            }
             const player = this.miningInfo.workerPool.get(ctx.query.walletAdress);
             if(player) {
                 player.timestamp = new Date().getTime()
@@ -48,7 +64,12 @@ class PoolContoller extends baseContoller {
 
     applyMiningQuota() {
         return async (ctx:Koa.ParameterizedContext<Koa.DefaultState, Koa.DefaultContext>)=>{
-            if(this.miningInfo.workerPool.size>255) {
+            if(!ctx.query.walletAdress) {
+                return this.error(ctx,{
+                    walletAdress:ctx.query.walletAdress
+                },'NEED_PARAMS')
+            }
+            if(this.miningInfo.workerPool.size>=255) {
                 return this.error(ctx,{},'OUT_OF_MAX_ONLINE')
             }
             this.miningInfo.workerPool.set(ctx.query.walletAdress,{
@@ -66,19 +87,22 @@ class PoolContoller extends baseContoller {
             })
         }
     }
-
+    async doMiningInfo() {
+        if(this.miningInfo.nextBlockHash!==this.poolAddressInfo.nowBlock.nextBlockHash) {
+            this.miningInfo.nextBlockHash = this.poolAddressInfo.nowBlock.nextBlockHash;
+            this.miningInfo.processValue = 0n;
+        }
+        for(const workerData of this.miningInfo.workerPool) {
+            const nowTime = new Date().getTime() 
+            if(workerData[1].timestamp+30*1000<nowTime) {
+                this.miningInfo.workerPool.delete(workerData[0])
+            }
+        }
+    }
     async runMiningInfo() {
+        await this.doMiningInfo()
         setInterval(async ()=>{
-            if(this.miningInfo.nextBlockHash!==this.poolAddressInfo.nowBlock.nextBlockHash) {
-                this.miningInfo.nextBlockHash = this.poolAddressInfo.nowBlock.nextBlockHash;
-                this.miningInfo.processValue = 0n;
-            }
-            for(const workerData of this.miningInfo.workerPool) {
-                const nowTime = new Date().getTime() 
-                if(workerData[1].timestamp+30*1000<nowTime) {
-                    this.miningInfo.workerPool.delete(workerData[0])
-                }
-            }
+            await this.doMiningInfo()
         },30*1000)
     }
 
@@ -106,6 +130,9 @@ class PoolContoller extends baseContoller {
 }
 
 const poolContoller = new PoolContoller()
-poolContoller.runPoolAddressInfo()
-poolContoller.runMiningInfo()
+async function run() {
+    await poolContoller.runPoolAddressInfo();
+    await poolContoller.runMiningInfo();
+}
+run()
 export default poolContoller;

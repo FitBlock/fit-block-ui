@@ -1,6 +1,6 @@
 const urlPrefix="/api"
 class MyRequest {
-    getParams(params) {
+    getParams(params={}) {
         const paramsStr = Object.entries(params).map(e=>e.join('=')).join('&');
         return paramsStr===''?'':`?${paramsStr}`
     }

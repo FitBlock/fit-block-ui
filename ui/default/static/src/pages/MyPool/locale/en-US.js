@@ -6,4 +6,8 @@ export default {
     "pool.title.miningBlockHash":"mining Block Hash",
     "pool.title.notStartMining":"Not Start Mining",
     "pool.dialog.pleaseWaitNodeSync":"wait node sync,please!",
+    "pool.error.OUT_OF_MAX_ONLINE":"out of max online num,wait please!",
+    "pool.text.onlinePeople":(params)=>{
+        return `Online People:${params.online}`
+    },
 }

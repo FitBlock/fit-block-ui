@@ -1,6 +1,7 @@
 import indexHtml from './index.html'
 import HTMLContent from '@/components/HTMLContent'
 import walletAddressPermission from '@/permission/walletAddress'
+import config from '@/config'
 import blockCore from 'fit-block-core/build/indexWeb.js';
 import myRequest from '@/components/MyRequest'
 import enUS from './locale/en-US';
@@ -14,6 +15,7 @@ export default class MyHome extends HTMLContent {
     constructor() {
         super();
         walletAddressPermission.checkWalletAdress()
+        this.walletAdress = window.localStorage.getItem(config.walletAdressKey)
         const transData = this.getTrans()
         this.render(indexHtml,{...transData})
         this.getPoolAddressInfo()
@@ -72,8 +74,28 @@ export default class MyHome extends HTMLContent {
             miningNextBlockHash = nextBlockHash
         }
     }
-    async applyQuota() {
-        
+    async getOnlinePeople(refreshTime) {
+        let send = true;
+        const requestFunc = async ()=>{
+            const onlinePeopleSpan = this.shadow.querySelector(".online-people")
+            if(!send) {
+                clearInterval(getOnlinePeopleInterval)
+                onlinePeopleSpan.innerText = '';
+                return;
+            }
+            const resp = await myRequest.get('/pool/getOnlinePeople',{walletAdress:this.walletAdress})
+            onlinePeopleSpan.innerText = myI18nInstance.formatMessage({
+                id:"pool.text.onlinePeople"
+            },resp.data)
+            send = false;
+        }
+        await requestFunc()
+        const getOnlinePeopleInterval = setInterval(async ()=>{
+            requestFunc()
+        },refreshTime)
+        return ()=>{
+            send = true
+        }
     }
     async startMining() {
         const startMiningBtn = this.shadow.querySelector(".start-mining-btn")
@@ -86,15 +108,46 @@ export default class MyHome extends HTMLContent {
             return 
         }
         await this.getPoolAddressInfo()
+        let startBigInt = 0n;
+        let endBigInt = 0n;
+        try{
+            const resp = await myRequest.get('/pool/applyMiningQuota',{
+                walletAdress:this.walletAdress
+            })
+            startBigInt = BigInt(resp.data.startBigInt)
+            endBigInt = BigInt(resp.data.endBigInt)
+        }catch(err) {
+            showTextDialog.innerText = myI18nInstance.formatMessage({id:`pool.error.${err.message}`})
+            showTextDialog.showModal()
+        }
         const showHashFunc = this.showMiningNextBlockHash(300);
+        const showOnlinePeopleFunc = await this.getOnlinePeople(10*1000);
+        let maxPowValue = 0n;
+        let maxBlock = this.poolAddressInfo.nowBlock;
         await blockCore.mining(
             this.poolAddressInfo.nowBlock,
             this.poolAddressInfo.poolAddress,
             this.poolAddressInfo.nowTransactionList,
             async (nextBlock, isComplete)=>{
+                const nowBigInt =  BigInt(`0x${nextBlock.blockVal}`)
+                const nowPowValue = this.poolAddressInfo.nowBlock.getNextBlockValPowValue(nextBlock)
+                if(nowPowValue>maxPowValue) {
+                    maxPowValue = nowPowValue
+                    maxBlock = nextBlock;
+                }
+                if(endBigInt<nowBigInt || isComplete) {
+                    await myRequest.post('/pool/acceptMiningBlock',{
+                        walletAdress:this.walletAdress,
+                        isComplete,
+                        block:this.poolAddressInfo.nowBlock.outBlock(maxBlock)
+                    })
+                    return false
+                }
                 showHashFunc(nextBlock.genBlockHash())
+                showOnlinePeopleFunc();
                 return true
-            }
+            },
+            startBigInt
         )
         startMiningBtn.disabled = false
         // to do 

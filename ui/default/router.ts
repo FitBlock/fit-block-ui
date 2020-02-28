@@ -14,4 +14,6 @@ router.get('/pool/getPoolAddressInfo',poolContoller.getPoolAddressInfo())
 router.get('/pool/getOnlinePeople',poolContoller.getOnlinePeople())
 // 申请挖矿数据段
 router.get('/pool/applyMiningQuota',poolContoller.applyMiningQuota())
+// 客户端挖取一个新的区块
+router.post('/pool/acceptMiningBlock',poolContoller.acceptMiningBlock())
 export default router
