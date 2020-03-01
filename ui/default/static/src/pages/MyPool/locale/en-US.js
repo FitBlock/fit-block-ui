@@ -10,4 +10,6 @@ export default {
     "pool.text.onlinePeople":(params)=>{
         return `Online People:${params.online}`
     },
+    "pool.button.backWallet":"Back Wallet",
+    "pool.text.stopMinigBackWallet":"level this page will stop mining,continue?",
 }

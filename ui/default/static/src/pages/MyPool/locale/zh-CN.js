@@ -10,4 +10,6 @@ export default {
     "pool.text.onlinePeople":(params)=>{
         return `在线人数:${params.online}`
     },
+    "pool.button.backWallet":"返回钱包",
+    "pool.text.stopMinigBackWallet":"离开这个页面将会停止挖矿,是否继续?",
 }

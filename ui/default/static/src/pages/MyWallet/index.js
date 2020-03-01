@@ -57,6 +57,9 @@ export default class MyWallet extends HTMLContent {
         const balanceText = this.shadow.querySelector(".balance-text")
         reloadCoinNumberBtn.disabled = true;
         const coinNumberInterval = setInterval(async ()=>{
+            if(window.location.hash!=="#wallet") {
+                clearInterval(coinNumberInterval)
+            }
             let data = JSON.parse(window.localStorage.getItem(config.coinNumberDataKey))
             if(!data){
                 const preGodBlock = blockCore.getPreGodBlock()

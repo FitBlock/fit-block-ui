@@ -38,6 +38,14 @@ export default class MyHome extends HTMLContent {
         startMiningBtn.addEventListener('click',()=>{
             this.startMining()
         })
+        const backWalletBtn = this.shadow.querySelector(".back-wallet-btn")
+        backWalletBtn.addEventListener('click',()=>{
+            const isContinueLevel = window.confirm(
+                myI18nInstance.formatMessage({id:"pool.text.stopMinigBackWallet"})
+            )
+            if(!isContinueLevel){return}
+            window.location.hash="#wallet";
+        })
         const showTextDialog = this.shadow.querySelector(".show-text-dialog")
         showTextDialog.addEventListener('click',()=>{
             showTextDialog.close()
