@@ -2,10 +2,12 @@ import * as Koa from 'koa';
 import fitBlockCore from 'fit-block-core'
 import baseContoller from './base';
 import config from '../config'
+// 暂时想不到更好的方法来实现类型提示
+import Block from 'fit-block-core/build/app/fitblock/Block';
 class PoolContoller extends baseContoller { 
     poolAddressInfo:{
         poolAddress:string,
-        nowBlock:any,
+        nowBlock:Block,
         nowTransactionList:Array<any>,
         miningCoin:number,
     };
@@ -15,7 +17,7 @@ class PoolContoller extends baseContoller {
         workerPool:Map<string,{
             powValue:bigint,
             timestamp:number,
-            nextBlock:any,
+            nextBlock:Block,
         }> // Pool Max Num 255
     }
     constructor() {
@@ -39,8 +41,35 @@ class PoolContoller extends baseContoller {
     }
     acceptMiningBlock() {
         return async (ctx:Koa.ParameterizedContext<Koa.DefaultState, Koa.DefaultContext>)=>{
-            console.log(ctx.post)
-            return this.sucess(ctx,{ok:true})
+            if(!ctx.post.walletAdress) {
+                return this.error(ctx,{
+                    walletAdress:ctx.post.walletAdress
+                },'NEED_PARAMS')
+            }
+            if(!ctx.post.block) {
+                return this.error(ctx,{
+                    block:ctx.post.block
+                },'NEED_PARAMS')
+            }
+            const player = this.miningInfo.workerPool.get(ctx.query.walletAdress);
+            if(!player) {
+                return this.error(ctx,{
+                    block:ctx.post.block
+                },'YOU_OUT_LINE')
+            }
+            const myStore = fitBlockCore.getStore()
+            const nextBlock = myStore.getBlockByStr(JSON.stringify(ctx.post.block))
+            player.timestamp = new Date().getTime();
+            player.nextBlock = nextBlock;
+            // 下面这步建议分赃后计算
+            // player.powValue = this.poolAddressInfo.nowBlock.getNextBlockValPowValue(nextBlock)
+            if(ctx.post.isComplete) {
+                if(this.poolAddressInfo.nowBlock.verifyNextBlock(nextBlock)) {
+                    // todo 分赃
+                    return this.sucess(ctx,{ok:true})
+                }
+            }
+            return this.sucess(ctx,{ok:false})
         }
     }
 
