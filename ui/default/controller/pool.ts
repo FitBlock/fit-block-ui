@@ -2,6 +2,7 @@ import * as Koa from 'koa';
 import fitBlockCore from 'fit-block-core'
 import baseContoller from './base';
 import config from '../config'
+// 本来预计项目小，看来还是得要server层，现在有点凌乱了，下次迁移
 // 暂时想不到更好的方法来实现类型提示
 import Block from 'fit-block-core/build/app/fitblock/Block';
 class PoolContoller extends baseContoller { 
@@ -23,7 +24,9 @@ class PoolContoller extends baseContoller {
     constructor() {
         super()
         this.poolAddressInfo = {
-            poolAddress: config.selfWalletAddress,
+            poolAddress: fitBlockCore.getWalletAdressByPublicKey(
+                fitBlockCore.getPublicKeyByPrivateKey(config.selfWalletAddressPrivate)
+            ),
             nowBlock:fitBlockCore.getPreGodBlock(),
             nowTransactionList:[],
             miningCoin:0
@@ -65,11 +68,38 @@ class PoolContoller extends baseContoller {
             // player.powValue = this.poolAddressInfo.nowBlock.getNextBlockValPowValue(nextBlock)
             if(ctx.post.isComplete) {
                 if(this.poolAddressInfo.nowBlock.verifyNextBlock(nextBlock)) {
-                    // todo 分赃
+                    // 分赃
+                    await this.allocateCoin();
                     return this.sucess(ctx,{ok:true})
                 }
             }
             return this.sucess(ctx,{ok:false})
+        }
+    }
+
+    async allocateCoin() {
+        if(this.miningInfo.nextBlockHash!==this.poolAddressInfo.nowBlock.nextBlockHash) {
+            this.miningInfo.nextBlockHash = this.poolAddressInfo.nowBlock.nextBlockHash;
+            this.miningInfo.processValue = 0n;
+            return
+        }
+        let totalPowValue = 0n
+        for(const workerData of this.miningInfo.workerPool) {
+            workerData[1].powValue = this.poolAddressInfo.nowBlock.getNextBlockValPowValue(workerData[1].nextBlock);
+            totalPowValue+=workerData[1].powValue
+        }
+        for(const workerData of this.miningInfo.workerPool) {
+            const allocateCoinNumber = workerData[1].powValue*BigInt(workerData[1].nextBlock.getOutBlockCoinNumber())/totalPowValue;
+            if(allocateCoinNumber>=2n) {
+                await fitBlockCore.keepTransaction(
+                    await fitBlockCore.genTransaction(
+                        config.selfWalletAddressPrivate,workerData[0],parseInt(allocateCoinNumber.toString())
+                    )
+                )
+            }
+            // 使得在线重新计算
+            workerData[1].nextBlock = fitBlockCore.getPreGodBlock()
+            workerData[1].powValue = 0n
         }
     }
 

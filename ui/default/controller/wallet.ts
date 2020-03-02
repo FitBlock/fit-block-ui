@@ -1,6 +1,7 @@
 import * as Koa from 'koa';
 import fitBlockCore from 'fit-block-core'
 import baseContoller from './base';
+// 本来预计项目小，看来还是得要server层，现在有点凌乱了，下次迁移
 type walletAdressCoinNumber = {
     timestamp:number,
     coinNumber:number,
