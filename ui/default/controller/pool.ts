@@ -9,6 +9,7 @@ class PoolContoller extends baseContoller {
     poolAddressInfo:{
         poolAddress:string,
         nowBlock:Block,
+        isLock:boolean,
         nowTransactionList:Array<any>,
         miningCoin:number,
     };
@@ -27,6 +28,7 @@ class PoolContoller extends baseContoller {
             poolAddress: fitBlockCore.getWalletAdressByPublicKey(
                 fitBlockCore.getPublicKeyByPrivateKey(config.selfWalletAddressPrivate)
             ),
+            isLock:false,
             nowBlock:fitBlockCore.getPreGodBlock(),
             nowTransactionList:[],
             miningCoin:0
@@ -64,12 +66,10 @@ class PoolContoller extends baseContoller {
             const nextBlock = myStore.getBlockByStr(JSON.stringify(ctx.post.block))
             player.timestamp = new Date().getTime();
             player.nextBlock = nextBlock;
-            // 下面这步建议分赃后计算
-            // player.powValue = this.poolAddressInfo.nowBlock.getNextBlockValPowValue(nextBlock)
             if(ctx.post.isComplete) {
                 if(this.poolAddressInfo.nowBlock.verifyNextBlock(nextBlock)) {
                     // 分赃
-                    await this.allocateCoin();
+                    await this.allocateCoin(nextBlock);
                     return this.sucess(ctx,{ok:true})
                 }
             }
@@ -77,12 +77,20 @@ class PoolContoller extends baseContoller {
         }
     }
 
-    async allocateCoin() {
+    resetMiningInfo() {
+        this.miningInfo.nextBlockHash = this.poolAddressInfo.nowBlock.nextBlockHash;
+        this.miningInfo.processValue = 0n;
+    }
+
+    async allocateCoin(nextBlock) {
+        if(this.poolAddressInfo.isLock){return}
+        this.poolAddressInfo.isLock = true;
         if(this.miningInfo.nextBlockHash!==this.poolAddressInfo.nowBlock.nextBlockHash) {
-            this.miningInfo.nextBlockHash = this.poolAddressInfo.nowBlock.nextBlockHash;
-            this.miningInfo.processValue = 0n;
+            this.resetMiningInfo()
+            this.poolAddressInfo.isLock = false;
             return
         }
+        await fitBlockCore.keepBlockData(this.poolAddressInfo.nowBlock, nextBlock)
         let totalPowValue = 0n
         for(const workerData of this.miningInfo.workerPool) {
             workerData[1].powValue = this.poolAddressInfo.nowBlock.getNextBlockValPowValue(workerData[1].nextBlock);
@@ -101,6 +109,9 @@ class PoolContoller extends baseContoller {
             workerData[1].nextBlock = fitBlockCore.getPreGodBlock()
             workerData[1].powValue = 0n
         }
+        this.poolAddressInfo.nowBlock = nextBlock;
+        this.resetMiningInfo()
+        this.poolAddressInfo.isLock = false;
     }
 
     getOnlinePeople() {
@@ -147,8 +158,7 @@ class PoolContoller extends baseContoller {
     }
     async doMiningInfo() {
         if(this.miningInfo.nextBlockHash!==this.poolAddressInfo.nowBlock.nextBlockHash) {
-            this.miningInfo.nextBlockHash = this.poolAddressInfo.nowBlock.nextBlockHash;
-            this.miningInfo.processValue = 0n;
+            this.resetMiningInfo()
         }
         for(const workerData of this.miningInfo.workerPool) {
             const nowTime = new Date().getTime() 
