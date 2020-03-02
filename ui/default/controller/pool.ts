@@ -85,11 +85,6 @@ class PoolContoller extends baseContoller {
     async allocateCoin(nextBlock) {
         if(this.poolAddressInfo.isLock){return}
         this.poolAddressInfo.isLock = true;
-        if(this.miningInfo.nextBlockHash!==this.poolAddressInfo.nowBlock.nextBlockHash) {
-            this.resetMiningInfo()
-            this.poolAddressInfo.isLock = false;
-            return
-        }
         await fitBlockCore.keepBlockData(this.poolAddressInfo.nowBlock, nextBlock)
         let totalPowValue = 0n
         for(const workerData of this.miningInfo.workerPool) {
@@ -157,9 +152,6 @@ class PoolContoller extends baseContoller {
         }
     }
     async doMiningInfo() {
-        if(this.miningInfo.nextBlockHash!==this.poolAddressInfo.nowBlock.nextBlockHash) {
-            this.resetMiningInfo()
-        }
         for(const workerData of this.miningInfo.workerPool) {
             const nowTime = new Date().getTime() 
             if(workerData[1].timestamp+30*1000<nowTime) {
@@ -181,6 +173,9 @@ class PoolContoller extends baseContoller {
         )
         this.poolAddressInfo.miningCoin+=miningData.coinNumber;
         this.poolAddressInfo.nowBlock = miningData.lastBlock
+        if(this.miningInfo.nextBlockHash!==this.poolAddressInfo.nowBlock.nextBlockHash) {
+            this.resetMiningInfo()
+        }
         const transactionSignList = []
         const myStore = fitBlockCore.getStore()
         for await(const transactionSign of await myStore.transactionSignIterator()) {
