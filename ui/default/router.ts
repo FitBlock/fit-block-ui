@@ -1,6 +1,7 @@
 import * as Router from 'koa-router'
 import walletContoller from './controller/wallet'
 import poolContoller from './controller/pool'
+import transContoller from './controller/trans'
 const router = new Router({
     prefix: '/api'
   })
@@ -16,4 +17,8 @@ router.get('/pool/getOnlinePeople',poolContoller.getOnlinePeople())
 router.get('/pool/applyMiningQuota',poolContoller.applyMiningQuota())
 // 客户端挖取一个新的区块
 router.post('/pool/acceptMiningBlock',poolContoller.acceptMiningBlock())
+// 保存交易
+router.post('/pool/keepTrans',transContoller.keepTrans())
+// 检测交易是否成功
+router.post('/pool/checkIsTransInBlock',transContoller.checkIsTransInBlock())
 export default router
