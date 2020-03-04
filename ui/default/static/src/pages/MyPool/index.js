@@ -11,6 +11,11 @@ const myI18nInstance = myI18n.getInstance({
     'en-US':enUS,
     'zh-CN':zhCN,
 })
+const miningStatusEnum = {
+    stop: 1,
+    start: 2,
+    stoping: 3,
+}
 export default class MyHome extends HTMLContent {
     constructor() {
         super();
@@ -24,6 +29,7 @@ export default class MyHome extends HTMLContent {
             nowBlock:blockCore.getPreGodBlock(),
             nowTransactionList:[]
         }
+        this.miningStatus = miningStatusEnum.stop
         this.addListen()
     }
 
@@ -36,7 +42,16 @@ export default class MyHome extends HTMLContent {
     addListen() {
         const startMiningBtn = this.shadow.querySelector(".start-mining-btn")
         startMiningBtn.addEventListener('click',()=>{
-            this.startMining()
+            switch(this.miningStatus) {
+                case miningStatusEnum.stop:
+                    this.startMining()
+                    break;
+                case miningStatusEnum.start:
+                    this.stopMining()
+                    break;
+                default:
+                    break;
+            }
         })
         const backWalletBtn = this.shadow.querySelector(".back-wallet-btn")
         backWalletBtn.addEventListener('click',()=>{
@@ -105,9 +120,16 @@ export default class MyHome extends HTMLContent {
             send = true
         }
     }
+    async stopMining() {
+        const startMiningBtn = this.shadow.querySelector(".start-mining-btn")
+        this.miningStatus = miningStatusEnum.stoping;
+        startMiningBtn.innerText = myI18nInstance.formatMessage({id:"pool.button.StopingMining"})
+        startMiningBtn.disabled = true
+    }
     async startMining() {
         const startMiningBtn = this.shadow.querySelector(".start-mining-btn")
-        startMiningBtn.disabled = true
+        startMiningBtn.innerText = myI18nInstance.formatMessage({id:"pool.button.stopMining"})
+        this.miningStatus = miningStatusEnum.start
         const coreConfig = blockCore.getConfig()
         const showTextDialog = this.shadow.querySelector(".show-text-dialog")
         if(this.poolAddressInfo.height<coreConfig.godBlockHeight) {
@@ -157,14 +179,13 @@ export default class MyHome extends HTMLContent {
             },
             startBigInt
         )
-        startMiningBtn.disabled = false
-        // to do 
-        /**
-         * 首先先预挖10S判断机器性能
-         * 然后分配大约两分钟的量给这台机器
-         * 挖好后将hash的最大值给服务，服务出块后分配矿工货币
-         * 如果出块，但最新块被放弃，则矿池亏损
-         */
+        if(this.miningStatus===miningStatusEnum.start) {
+            this.startMining()
+        } else {
+            this.miningStatus = miningStatusEnum.stop;
+            startMiningBtn.innerText = myI18nInstance.formatMessage({id:"pool.button.coinMining"})
+            startMiningBtn.disabled = false
+        }
     }
 
 }

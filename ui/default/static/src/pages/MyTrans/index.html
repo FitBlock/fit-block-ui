@@ -1,4 +1,4 @@
-<form class="into-form">
+<form class="trade-form">
     ${myI18n('trans.form.privateKey')}: 
     <input class="private-key-input"
      type="text" name="privateKey" 
@@ -26,10 +26,12 @@
      autofocus
      required />
     <br>
-    <button class=" trade-btn" type="submit">${myI18n('trans.button.trade')}</button>
+    <button class="trade-btn" type="submit">${myI18n('trans.button.trade')}</button>
 </form>
 <div>
-transList to do
+    <h1>${myI18n('trans.title.transactionEntrustList')}</h1>
+    <ul class="transaction-ul">
+    </ul>
 </div>
 <style>
     .private-key-input{

@@ -16,6 +16,11 @@ class TransContoller extends baseContoller {
             }
             const myStore = fitBlockCore.getStore()
             const transactionSign = myStore.getTransactionSignByStr(JSON.stringify(ctx.post.transactionSign))
+            if(!transactionSign.verify()) {
+                return this.error(ctx,{
+                    transactionSign:ctx.post.transactionSign
+                },'TRANSACTION_NOT_VERIFY')
+            }
             const isKeep = await myStore.keepTransactionSignData(transactionSign)
             return this.sucess(ctx,{
                 isKeep

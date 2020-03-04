@@ -17,9 +17,17 @@ export default class MyTrans extends HTMLContent {
         this.addListen()
     }
     addListen() {
-
+        const tradeForm = this.shadow.querySelector(".trade-form")
+        tradeForm.onsubmit = () =>{
+            this.tradeTransaction()
+            return false;
+        }
     }
-
+    tradeTransaction() {
+        // todo 
+        // 获取私钥，交易地址，数量生成签名交易保存到平台中
+        // 注意交易金额
+    }
     getTrans() {
         return {
             myI18n:(id,params={})=>myI18nInstance.formatMessage({id},params)

@@ -8,5 +8,6 @@ export default {
     "trans.form.volume":"交易量",
     "trans.form.volumeFormat":"交易量必须为整数",
     "trans.form.inputVolume":"请输入交易量",
-    "trans.button.trade":"交易"
+    "trans.button.trade":"交易",
+    "trans.title.transactionEntrustList":"交易委托列表",
 }
