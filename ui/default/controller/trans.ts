@@ -16,6 +16,14 @@ class TransContoller extends baseContoller {
             }
             const myStore = fitBlockCore.getStore()
             const transactionSign = myStore.getTransactionSignByStr(JSON.stringify(ctx.post.transactionSign))
+            // // 性能耗费过大, 放到其它步骤
+            // try {
+            //     await fitBlockCore.acceptTransaction(transactionSign)
+            // } catch(err) {
+            //     return this.error(ctx,{
+            //         transactionSign:ctx.post.transactionSign
+            //     },'TRANSACTION_NOT_VERIFY')
+            // }
             if(!transactionSign.verify()) {
                 return this.error(ctx,{
                     transactionSign:ctx.post.transactionSign
@@ -35,11 +43,22 @@ class TransContoller extends baseContoller {
                     transactionSign:ctx.post.transactionSign
                 },'NEED_PARAMS')
             }
+            if(!ctx.post.startBlock) {
+                return this.error(ctx,{
+                    startBlock:ctx.post.startBlock
+                },'NEED_PARAMS')
+            }
             const myStore = fitBlockCore.getStore()
             const transactionSign = myStore.getTransactionSignByStr(JSON.stringify(ctx.post.transactionSign))
-            const isInBlock = await myStore.checkIsTransactionSignInBlock(transactionSign)
+            const startBlock = myStore.getBlockByStr(JSON.stringify(ctx.post.startBlock))
+            const isInBlock = await myStore.checkIsTransactionSignInBlock(transactionSign, startBlock)
+            let lastBlock = startBlock;
+            for await (const block of await myStore.blockIterator(startBlock)) {
+                lastBlock = block;
+            }
             return this.sucess(ctx,{
-                isInBlock
+                isInBlock,
+                lastBlock
             })
         }
     }

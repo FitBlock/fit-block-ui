@@ -39,6 +39,10 @@ export default class MyWallet extends HTMLContent {
         getLastRecordsBtn.addEventListener('click',async()=>{
             await this.loadTransaction()
         })
+        const transBtn = this.shadow.querySelector(".trans-btn")
+        transBtn.addEventListener('click',()=>{
+            window.location.hash="#trans";
+        })
         const showTextDialog = this.shadow.querySelector(".show-text-dialog")
         showTextDialog.addEventListener('click',()=>{
             showTextDialog.close()

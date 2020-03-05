@@ -1,5 +1,6 @@
 export default {
     walletAdressKey:'walletAdress',
-    coinNumberDataKey:'coinNumberDataKey',
-    transactionDataKey:'transactionDataKey',
+    coinNumberDataKey:'wallet.coinNumberDataKey',
+    transactionDataKey:'wallet.transactionDataKey',
+    tradeTransactionDataKey:'trans.tradeTransactionDataKey',
 }

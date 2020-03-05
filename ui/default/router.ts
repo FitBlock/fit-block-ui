@@ -18,7 +18,7 @@ router.get('/pool/applyMiningQuota',poolContoller.applyMiningQuota())
 // 客户端挖取一个新的区块
 router.post('/pool/acceptMiningBlock',poolContoller.acceptMiningBlock())
 // 保存交易
-router.post('/pool/keepTrans',transContoller.keepTrans())
+router.post('/trans/keepTrans',transContoller.keepTrans())
 // 检测交易是否成功
-router.post('/pool/checkIsTransInBlock',transContoller.checkIsTransInBlock())
+router.post('/trans/checkIsTransInBlock',transContoller.checkIsTransInBlock())
 export default router

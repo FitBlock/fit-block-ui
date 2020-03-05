@@ -8,19 +8,19 @@
      autofocus
      required />
     <br>
-    {myI18n('trans.form.accepterWallet')}: 
-    <input class="private-key-input"
-     type="text" name="accepterWallet" 
-     pattern="[0-9a-f]{64}" 
-     title="${myI18n('trans.form.accepterWalletFormat')}"
-     placeholder="${myI18n('trans.form.inputAccepterWallet')}"
+    {myI18n('trans.form.accepterWalletAddress')}: 
+    <input class="accepter-wallet-address-input"
+     type="text" name="accepterWalletAddress" 
+     pattern="[1-9a-km-zA-HJ-NP-Z]{85,95}" 
+     title="${myI18n('trans.form.accepterWalletAddressFormat')}"
+     placeholder="${myI18n('trans.form.inputAccepterWalletAddress')}"
      autofocus
      required />
     <br>
     {myI18n('trans.form.volume')}: 
-    <input class="private-key-input"
+    <input class="volume-input"
      type="text" name="volume" 
-     pattern="[0-9a-f]{64}" 
+     pattern="[0-9]{15}" 
      title="${myI18n('trans.form.volumeFormat')}"
      placeholder="${myI18n('trans.form.inputVolume')}"
      autofocus
