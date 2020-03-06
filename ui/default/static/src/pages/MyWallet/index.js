@@ -134,7 +134,7 @@ export default class MyWallet extends HTMLContent {
                 JSON.stringify(transactionObj)
             ) 
             liStr+=`<li>${
-                myI18nInstance.formatMessage({id:'wallet.title.transactionRecord'},{
+                myI18nInstance.formatMessage({id:'wallet.text.transactionRecord'},{
                     sendAddress:transaction.transaction.senderAdress,
                     datetime:new Date(transaction.transaction.timestamp).toString(),
                     acceptAddress:transaction.transaction.accepterAdress,

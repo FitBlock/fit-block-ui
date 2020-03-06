@@ -45,23 +45,61 @@ export default class MyTrans extends HTMLContent {
         })
     }
     async tradeTransaction() {
-        // todo 
         const privateKeyInput = this.shadow.querySelector(".private-key-input")
         const accepterWalletAddressInput = this.shadow.querySelector(".accepter-wallet-address-input")
         const volumeInput = this.shadow.querySelector(".volume-input")
-        const transaction = await blockCore.genTransaction(privateKeyInput, accepterWalletAddressInput, volumeInput);
+        const transactionSign = await blockCore.genTransaction(privateKeyInput, accepterWalletAddressInput, volumeInput);
         try{
             await myRequest.post('/trans/keepTrans',{
-                transactionSign:transaction
+                transactionSign
             })
         } catch(err) {
             showTextDialog.innerText = myI18nInstance.formatMessage({id:`trans.error.${err.message}`})
             showTextDialog.showModal()
         }
+        this.transData.transList.push(transactionSign)
+        if(this.transData.transList.length>100) {
+            this.transData.transList.shift()
+        }
+        window.localStorage.setItem(config.tradeTransactionDataKey, this.transData)
         await this.refreshTransaction();
     }
+
     async refreshTransaction() {
-        // todo 通过this.transData获取数据
+        const startBlock = blockCore.getPreGodBlock()
+        startBlock.timestamp = this.this.transData.params.timestamp;
+        startBlock.nextBlockHash = this.this.transData.params.nextBlockHash;
+        for(const transactionSign of this.transData.transList) {
+            const resp = await myRequest.post('/trans/checkIsTransInBlock',{
+                startBlock,
+                transactionSign
+            })
+            transactionSign.inBlockHash = resp.data.inBlockHash
+        }
+        this.renderTransList(this.transData.transList)
+        const getLastBlockResp = await myRequest.post('/trans/getLastBlock',{
+            startBlock
+        })
+        this.this.transData.params.timestamp = getLastBlockResp.data.lastBlock.timestamp;
+        this.this.transData.params.nextBlockHash = getLastBlockResp.data.lastBlock.nextBlockHash;
+        window.localStorage.setItem(config.tradeTransactionDataKey, this.transData)
+    }
+
+    async renderTransList(transList) {
+        const transactionUl = this.shadow.querySelector(".transaction-ul")
+        let liStr = ''
+        for(const transactionSign of this.transData.transList) {
+            liStr+=`<li>${
+                myI18nInstance.formatMessage({id:'trans.text.transactionRecord'},{
+                    sendAddress:transactionSign.transaction.senderAdress,
+                    datetime:new Date(transactionSign.transaction.timestamp).toString(),
+                    acceptAddress:transactionSign.transaction.accepterAdress,
+                    coinNumber:transactionSign.transaction.transCoinNumber,
+                    isComplete:transactionSign.inBlockHash
+                })
+            }</li>`
+        }
+        transactionUl.innerHTML = liStr
     }
 
     getTrans() {

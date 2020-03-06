@@ -11,4 +11,8 @@ export default {
     "trans.button.trade":"trade",
     "trans.title.transactionEntrustList":"Transaction Entrust List",
     "trans.error.TRANSACTION_NOT_VERIFY":"Transaction verify failed!",
+    "wallet.text.transactionRecord":params=>{
+        return `${params.sendAddress} at ${params.datetime} send to ${params.acceptAddress},
+        volume:F${params.coinNumber}|status:${params.isComplete?'success':'pending'}`;
+    },
 }

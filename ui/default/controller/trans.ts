@@ -51,13 +51,27 @@ class TransContoller extends baseContoller {
             const myStore = fitBlockCore.getStore()
             const transactionSign = myStore.getTransactionSignByStr(JSON.stringify(ctx.post.transactionSign))
             const startBlock = myStore.getBlockByStr(JSON.stringify(ctx.post.startBlock))
-            const isInBlock = await myStore.checkIsTransactionSignInBlock(transactionSign, startBlock)
+            const inBlockHash = await myStore.checkIsTransactionSignInBlock(transactionSign, startBlock)
+            return this.sucess(ctx,{
+                inBlockHash
+            })
+        }
+    }
+
+    getLastBlock() {
+        return async (ctx:Koa.ParameterizedContext<Koa.DefaultState, Koa.DefaultContext>)=>{
+            if(!ctx.post.startBlock) {
+                return this.error(ctx,{
+                    startBlock:ctx.post.startBlock
+                },'NEED_PARAMS')
+            }
+            const myStore = fitBlockCore.getStore()
+            const startBlock = myStore.getBlockByStr(JSON.stringify(ctx.post.startBlock))
             let lastBlock = startBlock;
             for await (const block of await myStore.blockIterator(startBlock)) {
                 lastBlock = block;
             }
             return this.sucess(ctx,{
-                isInBlock,
                 lastBlock
             })
         }

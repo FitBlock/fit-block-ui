@@ -11,4 +11,8 @@ export default {
     "trans.button.trade":"交易",
     "trans.title.transactionEntrustList":"交易委托列表",
     "trans.error.TRANSACTION_NOT_VERIFY":"交易校验失败!",
+    "trans.text.transactionRecord":params=>{
+        return `${params.sendAddress}于${params.datetime}转账给${params.acceptAddress}
+        交易量:F${params.coinNumber}|状态:${params.isComplete?'交易成功':'交易中'}`;
+    },
 }

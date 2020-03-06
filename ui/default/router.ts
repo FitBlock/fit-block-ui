@@ -21,4 +21,6 @@ router.post('/pool/acceptMiningBlock',poolContoller.acceptMiningBlock())
 router.post('/trans/keepTrans',transContoller.keepTrans())
 // 检测交易是否成功
 router.post('/trans/checkIsTransInBlock',transContoller.checkIsTransInBlock())
+// 更新后获取最新区块
+router.post('/trans/getLastBlock',transContoller.getLastBlock())
 export default router
