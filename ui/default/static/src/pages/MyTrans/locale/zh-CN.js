@@ -15,4 +15,5 @@ export default {
         return `${params.sendAddress}于${params.datetime}转账给${params.acceptAddress}
         交易量:F${params.coinNumber}|状态:${params.isComplete?'交易成功':'交易中'}`;
     },
+    "trans.button.backWallet":"返回钱包",
 }

@@ -43,12 +43,17 @@ export default class MyTrans extends HTMLContent {
         showTextDialog.addEventListener('click',()=>{
             showTextDialog.close()
         })
+        const backWalletBtn = this.shadow.querySelector(".back-wallet-btn")
+        backWalletBtn.addEventListener('click',()=>{
+            window.location.hash="#wallet";
+        })
     }
     async tradeTransaction() {
         const privateKeyInput = this.shadow.querySelector(".private-key-input")
         const accepterWalletAddressInput = this.shadow.querySelector(".accepter-wallet-address-input")
         const volumeInput = this.shadow.querySelector(".volume-input")
-        const transactionSign = await blockCore.genTransaction(privateKeyInput, accepterWalletAddressInput, volumeInput);
+        const transactionSign = await blockCore.genTransaction(
+            privateKeyInput.value, accepterWalletAddressInput.value, volumeInput.value);
         try{
             await myRequest.post('/trans/keepTrans',{
                 transactionSign

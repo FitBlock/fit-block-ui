@@ -127,16 +127,20 @@ export default class MyHome extends HTMLContent {
         startMiningBtn.disabled = true
     }
     async startMining() {
-        const startMiningBtn = this.shadow.querySelector(".start-mining-btn")
-        startMiningBtn.innerText = myI18nInstance.formatMessage({id:"pool.button.stopMining"})
-        this.miningStatus = miningStatusEnum.start
-        const coreConfig = blockCore.getConfig()
+        const preGodBlock = blockCore.getPreGodBlock()
         const showTextDialog = this.shadow.querySelector(".show-text-dialog")
-        if(this.poolAddressInfo.height<coreConfig.godBlockHeight) {
+        const coreConfig = blockCore.getConfig()
+        if(
+            this.poolAddressInfo.nowBlock.nextBlockHash===preGodBlock.nextBlockHash ||
+            this.poolAddressInfo.nowBlock.height<coreConfig.godBlockHeight
+        ) {
             showTextDialog.innerText = myI18nInstance.formatMessage({id:"pool.dialog.pleaseWaitNodeSync"})
             showTextDialog.showModal()
             return 
         }
+        const startMiningBtn = this.shadow.querySelector(".start-mining-btn")
+        startMiningBtn.innerText = myI18nInstance.formatMessage({id:"pool.button.stopMining"})
+        this.miningStatus = miningStatusEnum.start
         await this.getPoolAddressInfo()
         let startBigInt = 0n;
         let endBigInt = 0n;

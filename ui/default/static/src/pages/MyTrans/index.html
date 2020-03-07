@@ -8,7 +8,7 @@
      autofocus
      required />
     <br>
-    {myI18n('trans.form.accepterWalletAddress')}: 
+    ${myI18n('trans.form.accepterWalletAddress')}: 
     <input class="accepter-wallet-address-input"
      type="text" name="accepterWalletAddress" 
      pattern="[1-9a-km-zA-HJ-NP-Z]{85,95}" 
@@ -17,17 +17,22 @@
      autofocus
      required />
     <br>
-    {myI18n('trans.form.volume')}: 
+    ${myI18n('trans.form.volume')}: 
     <input class="volume-input"
      type="text" name="volume" 
-     pattern="[0-9]{15}" 
+     pattern="[0-9]{1,15}" 
      title="${myI18n('trans.form.volumeFormat')}"
      placeholder="${myI18n('trans.form.inputVolume')}"
      autofocus
      required />
     <br>
     <button class="trade-btn" type="submit">${myI18n('trans.button.trade')}</button>
+    <button 
+    class="back-wallet-btn" 
+    type="button" 
+    >${myI18n('trans.button.backWallet')}</button>
 </form>
+<dialog class="show-text-dialog"></dialog>
 <div>
     <h1>${myI18n('trans.title.transactionEntrustList')}</h1>
     <ul class="transaction-ul">
@@ -36,5 +41,8 @@
 <style>
     .private-key-input{
         width: 500px;
+    }
+    .accepter-wallet-address-input{
+        width: 650px;
     }
 </style>
