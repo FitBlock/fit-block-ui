@@ -3,6 +3,8 @@ import fitBlockCore from 'fit-block-core'
 import baseContoller from './base';
 import config from '../config'
 // 本来预计项目小，看来还是得要server层，现在有点凌乱了，下次迁移
+import blockServer from '../server/block';
+import transServer from '../server/trans';
 // 暂时想不到更好的方法来实现类型提示
 import Block from 'fit-block-core/build/app/fitblock/Block';
 class PoolContoller extends baseContoller { 
@@ -56,7 +58,7 @@ class PoolContoller extends baseContoller {
                     block:ctx.post.block
                 },'NEED_PARAMS')
             }
-            const player = this.miningInfo.workerPool.get(ctx.query.walletAdress);
+            const player = this.miningInfo.workerPool.get(ctx.post.walletAdress);
             if(!player) {
                 return this.error(ctx,{
                     block:ctx.post.block
@@ -105,6 +107,7 @@ class PoolContoller extends baseContoller {
             workerData[1].powValue = 0n
         }
         this.poolAddressInfo.nowBlock = nextBlock;
+        this.poolAddressInfo.nowTransactionList = await transServer.getLastTrans();
         this.resetMiningInfo()
         this.poolAddressInfo.isLock = false;
     }
@@ -171,17 +174,13 @@ class PoolContoller extends baseContoller {
             this.poolAddressInfo.poolAddress,
             this.poolAddressInfo.nowBlock
         )
+        miningData.lastBlock = await blockServer.getReallyLastBlock(miningData.lastBlock)
         this.poolAddressInfo.miningCoin+=miningData.coinNumber;
         this.poolAddressInfo.nowBlock = miningData.lastBlock
         if(this.miningInfo.nextBlockHash!==this.poolAddressInfo.nowBlock.nextBlockHash) {
             this.resetMiningInfo()
         }
-        const transactionSignList = []
-        const myStore = fitBlockCore.getStore()
-        for await(const transactionSign of await myStore.transactionSignIterator()) {
-            transactionSignList.push(transactionSign)
-        }
-        this.poolAddressInfo.nowTransactionList = transactionSignList;
+        this.poolAddressInfo.nowTransactionList = await transServer.getLastTrans();
     }
 
     async runPoolAddressInfo() {

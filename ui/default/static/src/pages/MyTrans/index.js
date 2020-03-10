@@ -93,7 +93,7 @@ export default class MyTrans extends HTMLContent {
     async renderTransList(transList) {
         const transactionUl = this.shadow.querySelector(".transaction-ul")
         let liStr = ''
-        for(const transactionSign of this.transData.transList) {
+        for(const transactionSign of transList) {
             liStr+=`<li>${
                 myI18nInstance.formatMessage({id:'trans.text.transactionRecord'},{
                     sendAddress:transactionSign.transaction.senderAdress,

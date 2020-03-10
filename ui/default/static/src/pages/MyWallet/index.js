@@ -71,7 +71,8 @@ export default class MyWallet extends HTMLContent {
                     coinNumber:0,
                     params:{
                         timestamp:preGodBlock.timestamp,
-                        nextBlockHash:preGodBlock.nextBlockHash
+                        nextBlockHash:preGodBlock.nextBlockHash,
+                        height:preGodBlock.height,
                     }
                 }
             }
@@ -105,7 +106,8 @@ export default class MyWallet extends HTMLContent {
                 transactionList:[],
                 params:{
                     timestamp:preGodBlock.timestamp,
-                    nextBlockHash:preGodBlock.nextBlockHash
+                    nextBlockHash:preGodBlock.nextBlockHash,
+                    height:preGodBlock.height,
                 }
             }
         }
@@ -128,23 +130,23 @@ export default class MyWallet extends HTMLContent {
 
     prependUl(transactionList) {
         const transactionUl = this.shadow.querySelector(".transaction-ul")
-        let liStr = ''
+        let liList = []
         for(const transactionObj of transactionList) {
             const transaction = blockCore.getStore().getTransactionSignByStr(
                 JSON.stringify(transactionObj)
             ) 
-            liStr+=`<li>${
-                myI18nInstance.formatMessage({id:'wallet.text.transactionRecord'},{
-                    sendAddress:transaction.transaction.senderAdress,
-                    datetime:new Date(transaction.transaction.timestamp).toString(),
-                    acceptAddress:transaction.transaction.accepterAdress,
-                    coinNumber:transaction.transaction.transCoinNumber,
-                    tradingNumber:transaction.transaction.getTradingFees(),
-                    arriveNumber:transaction.transaction.getArriveFees(),
-                })
-            }</li>`
+            const li = document.createElement('li');
+            li.innerText = myI18nInstance.formatMessage({id:'wallet.text.transactionRecord'},{
+                sendAddress:transaction.transaction.senderAdress,
+                datetime:new Date(transaction.transaction.timestamp).toString(),
+                acceptAddress:transaction.transaction.accepterAdress,
+                coinNumber:transaction.transaction.transCoinNumber,
+                tradingNumber:transaction.transaction.getTradingFees(),
+                arriveNumber:transaction.transaction.getArriveFees(),
+            })
+            liList.push(li)
         }
-        transactionUl.prepend(liStr)
+        transactionUl.prepend(...liList)
     }
     getTrans() {
         return {

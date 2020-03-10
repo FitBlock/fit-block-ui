@@ -72,7 +72,7 @@ export default class MyHome extends HTMLContent {
         const myStore = blockCore.getStore()
         this.poolAddressInfo.nowBlock = myStore.getBlockByStr(JSON.stringify(resp.data.nowBlock))
         const transactionList = resp.data.nowTransactionList.map((transactionData)=>{
-            myStore.getTransactionSignByStr(JSON.stringify(transactionData))
+            return myStore.getTransactionSignByStr(JSON.stringify(transactionData))
         })
         this.poolAddressInfo.nowTransactionList = transactionList
         const poolAddressSpan = this.shadow.querySelector(".pool-address")

@@ -1,6 +1,7 @@
 import * as Koa from 'koa';
 import fitBlockCore from 'fit-block-core'
 import baseContoller from './base';
+import blockServer from '../server/block';
 // 本来预计项目小，看来还是得要server层，现在有点凌乱了，下次迁移
 class TransContoller extends baseContoller { 
     constructor() {
@@ -65,12 +66,7 @@ class TransContoller extends baseContoller {
                     startBlock:ctx.post.startBlock
                 },'NEED_PARAMS')
             }
-            const myStore = fitBlockCore.getStore()
-            const startBlock = myStore.getBlockByStr(JSON.stringify(ctx.post.startBlock))
-            let lastBlock = startBlock;
-            for await (const block of await myStore.blockIterator(startBlock)) {
-                lastBlock = block;
-            }
+            let lastBlock = await blockServer.getLastBlock(ctx.post.startBlock);
             return this.sucess(ctx,{
                 lastBlock
             })
