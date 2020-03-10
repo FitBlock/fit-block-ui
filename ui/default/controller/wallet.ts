@@ -61,6 +61,9 @@ class WalletContoller extends baseContoller {
                     this.walletAdressCoinNumberMap.delete(wacnObj[0])
                     continue;
                 }
+                if(wacnObj[1].done) {
+                    continue;
+                }
                 const preGodBlock =  fitBlockCore.getPreGodBlock();
                 preGodBlock.timestamp = wacnObj[1].params.timestamp
                 preGodBlock.nextBlockHash = wacnObj[1].params.nextBlockHash
