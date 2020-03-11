@@ -24,6 +24,10 @@ export default class MyHeader extends HTMLContent {
         selectDom.addEventListener('change',(event) =>{
             myI18nInstance.changeLang(event.target.value)
         })
+        const buildSelfPoolBtn = this.shadow.querySelector(".build-self-pool")
+        buildSelfPoolBtn.addEventListener('click',(event) =>{
+            window.open('https://github.com/FitBlock/fit-block#build-node')
+        })
     }
     addSelectOption(langList) {
         const lang = myI18nInstance.getLang()
