@@ -7,7 +7,8 @@ import {join as pathJoin} from 'path'
 import fitBlockStore from 'fit-block-store'
 import postData from './middleware/postData'
 import { Worker, isMainThread } from  'worker_threads'
-// import fitBlockCore from 'fit-block-core'
+import fitBlockCore from 'fit-block-core'
+const logger = fitBlockCore.getLogger()
 import fitBlockP2p from 'fit-block-p2p'
 export default class UIDefault extends UIBase {
     async start():Promise<void> {
@@ -17,7 +18,7 @@ export default class UIDefault extends UIBase {
         if (isMainThread) {
             const worker = new Worker(__filename);
             worker.on('error', (err)=>{
-                // todo 写入文件，在dev模式再显示控制台
+                logger.warn(err);
             });
         } else {
             return await fitBlockP2p.run()
