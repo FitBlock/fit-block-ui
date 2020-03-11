@@ -6,6 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\"",
     "web": "node ./build/web/index",
+    "web:dev": "node ./build/web/index --dev",
     "prepare": "npx tsc",
     "build": "npx tsc && npx webpack"
   },
@@ -38,7 +39,7 @@
     "webpack-cli": "^3.3.10"
   },
   "dependencies": {
-    "fit-block-core": "^1.2.8",
+    "fit-block-core": "^1.2.9",
     "fit-block-p2p": "^1.0.6",
     "fit-block-store": "^1.0.1",
     "koa": "^2.11.0",
