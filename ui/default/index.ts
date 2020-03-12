@@ -21,6 +21,12 @@ export default class UIDefault extends UIBase {
                 logger.warn(err);
             });
         } else {
+            /**
+             * grpc只要在多线程使用会报C++模块引用失败Error:Module did not self-register.
+             * 导致p2p服务没有真正启动，现在先考虑修复方案
+             * 具体可参考：
+             * https://github.com/grpc/grpc-node/issues/778
+             */
             return await fitBlockP2p.run()
         }
         const app = new Koa();
