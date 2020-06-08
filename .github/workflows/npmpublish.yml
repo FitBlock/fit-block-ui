@@ -1,9 +1,6 @@
 name: fit-block-ui Package
 
 on:
-  pull_request:
-    branches:
-      - master
   push:
     branches:
       - master
